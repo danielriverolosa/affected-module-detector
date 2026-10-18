@@ -1,91 +1,137 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="100%" height="100%">
-  <style>
-    .canvas { fill: #FAFAFA; stroke: #E4E4E7; stroke-width: 1; }
-    .zone-gradle { fill: #FFFFFF; stroke: #D4D4D8; stroke-width: 1; stroke-dasharray: 4 4; }
-    .zone-pure { fill: #FFFFFF; stroke: #18181B; stroke-width: 1.5; }
-    .card { fill: #F4F4F5; stroke: #D4D4D8; stroke-width: 1; }
-    .card-seam { fill: #EFF6FF; stroke: #2563EB; stroke-width: 1.2; }
-    .zone-title { font: 600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0.08em; fill: #71717A; }
-    .code { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #18181B; }
-    .code-seam { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1D4ED8; }
-    .meta { font: 400 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #52525B; }
-    .edge { stroke: #71717A; stroke-width: 1.2; fill: none; }
-    .arr { fill: #71717A; }
-    @media (prefers-color-scheme: dark) {
-      .canvas { fill: #0D1117; stroke: #30363D; }
-      .zone-gradle { fill: #0D1117; stroke: #30363D; }
-      .zone-pure { fill: #161B22; stroke: #8B949E; }
-      .card { fill: #161B22; stroke: #30363D; }
-      .card-seam { fill: #121D2F; stroke: #388BFD; }
-      .zone-title { fill: #8B949E; }
-      .code { fill: #E6EDF3; }
-      .code-seam { fill: #58A6FF; }
-      .meta { fill: #8B949E; }
-      .edge { stroke: #8B949E; }
-      .arr { fill: #8B949E; }
-    }
-  </style>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 390" width="100%" height="100%">
   <defs>
-    <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M 0 1 L 7 4 L 0 7 z" class="arr"/>
+    <style>
+      .canvas { fill: #F8F9FA; stroke: #DADCE0; stroke-width: 1; }
+      .grid { stroke: #E8EAED; stroke-width: 1; }
+      .zone-gradle { fill: #FFFFFF; stroke: #BDC1C6; stroke-width: 1; stroke-dasharray: 5 4; }
+      .zone-core { fill: #E8F0FE; stroke: #1A73E8; stroke-width: 1.5; }
+      .card { fill: #F8F9FA; stroke: #DADCE0; stroke-width: 1; }
+      .card-core { fill: #FFFFFF; stroke: #1A73E8; stroke-width: 1.5; }
+      .card-res { fill: #FFFFFF; stroke: #34A853; stroke-width: 1.5; }
+
+      .g-blue-bar { fill: #4285F4; }
+      .g-red-bar { fill: #EA4335; }
+      .g-yellow-bar { fill: #FBBC04; }
+      .g-green-bar { fill: #34A853; }
+
+      .txt-zone { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px; font-weight: 700; fill: #5F6368; letter-spacing: 0.08em; }
+      .txt-zone-core { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px; font-weight: 700; fill: #174EA6; letter-spacing: 0.08em; }
+      .txt-title { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 13px; font-weight: 700; fill: #202124; }
+      .txt-title-core { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 13px; font-weight: 700; fill: #174EA6; }
+      .txt-title-res { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 13px; font-weight: 700; fill: #0D652D; }
+      .txt-body { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11.5px; fill: #5F6368; }
+
+      .wire { stroke: #80868B; stroke-width: 1.5; fill: none; }
+      .wire-core { stroke: #1A73E8; stroke-width: 1.75; fill: none; }
+      .arr { fill: #80868B; }
+      .arr-core { fill: #1A73E8; }
+
+      @media (prefers-color-scheme: dark) {
+        .canvas { fill: #131314; stroke: #3C4043; }
+        .grid { stroke: #1E1F20; }
+        .zone-gradle { fill: #1E1F20; stroke: #5F6368; }
+        .zone-core { fill: #172B4D; stroke: #8AB4F8; }
+        .card { fill: #131314; stroke: #3C4043; }
+        .card-core { fill: #1E1F20; stroke: #8AB4F8; }
+        .card-res { fill: #1E1F20; stroke: #81C995; }
+
+        .txt-zone { fill: #9AA0A6; }
+        .txt-zone-core { fill: #8AB4F8; }
+        .txt-title { fill: #E8EAED; }
+        .txt-title-core { fill: #8AB4F8; }
+        .txt-title-res { fill: #81C995; }
+        .txt-body { fill: #9AA0A6; }
+
+        .wire { stroke: #9AA0A6; }
+        .wire-core { stroke: #8AB4F8; }
+        .arr { fill: #9AA0A6; }
+        .arr-core { fill: #8AB4F8; }
+      }
+    </style>
+    <pattern id="ggrid4" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" class="grid"/>
+    </pattern>
+    <marker id="a4" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 7 4 L 0 6.5 z" class="arr"/>
     </marker>
+    <marker id="a4c" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 7 4 L 0 6.5 z" class="arr-core"/>
+    </marker>
+    <clipPath id="cclip4">
+      <rect width="1080" height="390" rx="10"/>
+    </clipPath>
   </defs>
 
-  <rect width="960" height="340" rx="6" class="canvas"/>
+  <g clip-path="url(#cclip4)">
+    <rect width="1080" height="390" rx="10" class="canvas"/>
+    <rect width="1080" height="390" rx="10" fill="url(#ggrid4)"/>
+    <rect x="0" y="0" width="270" height="4" class="g-blue-bar"/>
+    <rect x="270" y="0" width="270" height="4" class="g-red-bar"/>
+    <rect x="540" y="0" width="270" height="4" class="g-yellow-bar"/>
+    <rect x="810" y="0" width="270" height="4" class="g-green-bar"/>
+  </g>
+  <rect width="1080" height="390" rx="10" fill="none" class="canvas"/>
 
-  <!-- Left Zone: Gradle Adapter -->
-  <rect x="24" y="20" width="564" height="300" rx="4" class="zone-gradle"/>
-  <text x="40" y="42" class="zone-title">GRADLE 9 ADAPTER LAYER (org.gradle.api.*)</text>
+  <!-- ==================== LEFT ZONE: GRADLE ADAPTER ==================== -->
+  <rect x="28" y="24" width="644" height="342" rx="8" class="zone-gradle"/>
+  <text x="48" y="48" class="txt-zone">GRADLE 9 ADAPTER LAYER (org.gradle.api.*)</text>
 
-  <!-- Right Zone: Pure Kotlin Seam -->
-  <rect x="612" y="20" width="324" height="300" rx="4" class="zone-pure"/>
-  <text x="628" y="42" class="zone-title">PURE KOTLIN CORE SEAM (ZERO GRADLE IMPORTS)</text>
+  <!-- AffectedModulesPlugin -->
+  <rect x="48" y="66" width="280" height="124" rx="6" class="card"/>
+  <rect x="48" y="66" width="4" height="124" rx="2" class="g-blue-bar"/>
+  <text x="66" y="92" class="txt-title">AffectedModulesPlugin</text>
+  <text x="66" y="116" class="txt-body">• Extracts reverse dependency DAG</text>
+  <text x="66" y="138" class="txt-body">• Detects Android / JVM / Roborazzi</text>
+  <text x="66" y="160" class="txt-body">• Registers 4 root selector tasks</text>
 
-  <!-- Cards inside Gradle Adapter -->
-  <rect x="40" y="60" width="240" height="106" rx="4" class="card"/>
-  <text x="54" y="82" class="code">AffectedModulesPlugin</text>
-  <text x="54" y="102" class="meta">• Extracts reverse dependency DAG</text>
-  <text x="54" y="120" class="meta">• Detects Android / JVM / Roborazzi</text>
-  <text x="54" y="138" class="meta">• Registers 4 root selector tasks</text>
+  <!-- AffectedModulesExtension -->
+  <rect x="48" y="220" width="280" height="124" rx="6" class="card"/>
+  <rect x="48" y="220" width="4" height="124" rx="2" class="g-yellow-bar"/>
+  <text x="66" y="246" class="txt-title">AffectedModulesExtension</text>
+  <text x="66" y="270" class="txt-body">• baseRef: Property&lt;String&gt;</text>
+  <text x="66" y="292" class="txt-body">• ignoredPaths / globalPaths</text>
+  <text x="66" y="314" class="txt-body">• Task &amp; plugin ID conventions</text>
 
-  <rect x="40" y="190" width="240" height="106" rx="4" class="card"/>
-  <text x="54" y="212" class="code">AffectedModulesExtension</text>
-  <text x="54" y="232" class="meta">• baseRef: Property&lt;String&gt;</text>
-  <text x="54" y="250" class="meta">• ignoredPaths / globalPaths</text>
-  <text x="54" y="268" class="meta">• Task &amp; plugin ID conventions</text>
+  <!-- GitChangedFilesValueSource -->
+  <rect x="372" y="66" width="280" height="110" rx="6" class="card"/>
+  <rect x="372" y="66" width="4" height="110" rx="2" class="g-red-bar"/>
+  <text x="390" y="92" class="txt-title">GitChangedFilesValueSource</text>
+  <text x="390" y="116" class="txt-body">• Injected ExecOperations</text>
+  <text x="390" y="138" class="txt-body">• Runs git diff baseRef...HEAD</text>
+  <text x="390" y="160" class="txt-body">• Throws GradleException on failure</text>
 
-  <rect x="328" y="60" width="240" height="94" rx="4" class="card"/>
-  <text x="342" y="82" class="code">GitChangedFilesValueSource</text>
-  <text x="342" y="102" class="meta">• Injected ExecOperations</text>
-  <text x="342" y="120" class="meta">• Runs git diff baseRef...HEAD</text>
-  <text x="342" y="138" class="meta">• Throws GradleException on failure</text>
+  <!-- PrintAffectedTasksTask -->
+  <rect x="372" y="206" width="280" height="138" rx="6" class="card"/>
+  <rect x="372" y="206" width="4" height="138" rx="2" class="g-green-bar"/>
+  <text x="390" y="232" class="txt-title">PrintAffectedTasksTask</text>
+  <text x="390" y="256" class="txt-body">• @DisableCachingByDefault</text>
+  <text x="390" y="278" class="txt-body">• Serializable @Input properties</text>
+  <text x="390" y="300" class="txt-body">• Zero Task.project references</text>
+  <text x="390" y="322" class="txt-body">• Prints matched tasks to stdout</text>
 
-  <rect x="328" y="178" width="240" height="118" rx="4" class="card"/>
-  <text x="342" y="200" class="code">PrintAffectedTasksTask</text>
-  <text x="342" y="220" class="meta">• @DisableCachingByDefault</text>
-  <text x="342" y="238" class="meta">• Serializable @Input properties</text>
-  <text x="342" y="256" class="meta">• Zero Task.project references</text>
-  <text x="342" y="274" class="meta">• Prints matched tasks to stdout</text>
+  <!-- ==================== RIGHT ZONE: PURE KOTLIN SEAM ==================== -->
+  <rect x="700" y="24" width="352" height="342" rx="8" class="zone-core"/>
+  <text x="720" y="48" class="txt-zone-core">PURE KOTLIN SEAM · NO GRADLE IMPORTS</text>
 
-  <!-- Cards inside Pure Kotlin Seam -->
-  <rect x="628" y="60" width="292" height="130" rx="4" class="card-seam"/>
-  <text x="644" y="84" class="code-seam">AffectedModuleCalculator</text>
-  <text x="644" y="106" class="meta">• Longest-prefix module path matching</text>
-  <text x="644" y="124" class="meta">• Separates src/test vs src/androidTest</text>
-  <text x="644" y="142" class="meta">• Transitive BFS on reverseDependencies</text>
-  <text x="644" y="160" class="meta">• Pure function: calculate(...)</text>
+  <!-- AffectedModuleCalculator -->
+  <rect x="720" y="66" width="312" height="148" rx="6" class="card-core"/>
+  <text x="738" y="92" class="txt-title-core">AffectedModuleCalculator</text>
+  <text x="738" y="118" class="txt-body">• Longest-prefix module path matching</text>
+  <text x="738" y="140" class="txt-body">• Separates src/test vs src/androidTest</text>
+  <text x="738" y="162" class="txt-body">• Transitive BFS on reverseDependencies</text>
+  <text x="738" y="184" class="txt-body">• Pure function: calculate(...)</text>
 
-  <rect x="628" y="214" width="292" height="82" rx="4" class="card"/>
-  <text x="644" y="236" class="code">AffectedAnalysisResult</text>
-  <text x="644" y="256" class="meta">• affectedTestModules / ScreenshotModules</text>
-  <text x="644" y="274" class="meta">• affectedAndroidTestModules / LintModules</text>
+  <!-- AffectedAnalysisResult -->
+  <rect x="720" y="242" width="312" height="102" rx="6" class="card-res"/>
+  <text x="738" y="268" class="txt-title-res">AffectedAnalysisResult</text>
+  <text x="738" y="294" class="txt-body">• affectedTestModules / ScreenshotModules</text>
+  <text x="738" y="316" class="txt-body">• affectedAndroidTestModules / LintModules</text>
 
-  <!-- Connectors -->
-  <line x1="280" y1="100" x2="326" y2="100" class="edge" marker-end="url(#ar)"/>
-  <line x1="280" y1="130" x2="326" y2="215" class="edge" marker-end="url(#ar)"/>
-  <line x1="160" y1="166" x2="160" y2="188" class="edge" marker-end="url(#ar)"/>
-  <line x1="448" y1="154" x2="448" y2="176" class="edge" marker-end="url(#ar)"/>
-  <line x1="568" y1="237" x2="626" y2="135" class="edge" marker-end="url(#ar)"/>
-  <line x1="774" y1="190" x2="774" y2="212" class="edge" marker-end="url(#ar)"/>
+  <!-- ==================== CONNECTORS ==================== -->
+  <path d="M 188 190 L 188 217" class="wire" marker-end="url(#a4)"/>
+  <path d="M 328 118 L 369 118" class="wire" marker-end="url(#a4)"/>
+  <path d="M 328 154 L 369 242" class="wire" marker-end="url(#a4)"/>
+  <path d="M 512 176 L 512 203" class="wire" marker-end="url(#a4)"/>
+  <path d="M 652 275 L 717 154" class="wire-core" marker-end="url(#a4c)"/>
+  <path d="M 876 214 L 876 239" class="wire-core" marker-end="url(#a4c)"/>
 </svg>

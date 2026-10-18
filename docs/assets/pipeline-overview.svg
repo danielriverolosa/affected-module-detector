@@ -1,130 +1,198 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" width="100%" height="100%">
-  <style>
-    .canvas { fill: #FAFAFA; stroke: #E4E4E7; stroke-width: 1; }
-    .grid-line { stroke: #E4E4E7; stroke-width: 1; stroke-dasharray: 3 3; }
-    .box { fill: #FFFFFF; stroke: #D4D4D8; stroke-width: 1.2; }
-    .box-core { fill: #FFFFFF; stroke: #18181B; stroke-width: 1.5; }
-    .box-sub { fill: #F4F4F5; stroke: #E4E4E7; stroke-width: 1; }
-    .title { font: 600 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #18181B; }
-    .section { font: 600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 0.08em; fill: #71717A; }
-    .code { font: 500 11.5px ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; fill: #18181B; }
-    .code-muted { font: 400 10.5px ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; fill: #52525B; }
-    .desc { font: 400 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #52525B; }
-    .tag { fill: #F4F4F5; stroke: #D4D4D8; stroke-width: 1; }
-    .tag-blue { fill: #EFF6FF; stroke: #BFDBFE; stroke-width: 1; }
-    .code-blue { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1D4ED8; }
-    .connector { fill: none; stroke: #71717A; stroke-width: 1.2; }
-    .arrow { fill: #71717A; }
-    @media (prefers-color-scheme: dark) {
-      .canvas { fill: #0D1117; stroke: #30363D; }
-      .grid-line { stroke: #21262D; }
-      .box { fill: #161B22; stroke: #30363D; }
-      .box-core { fill: #161B22; stroke: #8B949E; }
-      .box-sub { fill: #0D1117; stroke: #30363D; }
-      .title { fill: #E6EDF3; }
-      .section { fill: #8B949E; }
-      .code { fill: #E6EDF3; }
-      .code-muted { fill: #8B949E; }
-      .desc { fill: #8B949E; }
-      .tag { fill: #21262D; stroke: #30363D; }
-      .tag-blue { fill: #121D2F; stroke: #1F6FEB; }
-      .code-blue { fill: #58A6FF; }
-      .connector { stroke: #8B949E; }
-      .arrow { fill: #8B949E; }
-    }
-  </style>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 500" width="100%" height="100%">
   <defs>
-    <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M 0 1 L 7 4 L 0 7 z" class="arrow"/>
+    <style>
+      .canvas { fill: #F8F9FA; stroke: #DADCE0; stroke-width: 1; }
+      .grid { stroke: #E8EAED; stroke-width: 1; }
+      .card { fill: #FFFFFF; stroke: #DADCE0; stroke-width: 1; }
+      .card-core { fill: #FFFFFF; stroke: #1A73E8; stroke-width: 1.5; }
+      .subcard { fill: #F8F9FA; stroke: #DADCE0; stroke-width: 1; }
+      .code-box { fill: #F1F3F4; stroke: #DADCE0; stroke-width: 1; }
+      .divider { stroke: #DADCE0; stroke-width: 1; stroke-dasharray: 4 4; }
+
+      .g-blue-bar { fill: #4285F4; }
+      .g-red-bar { fill: #EA4335; }
+      .g-yellow-bar { fill: #FBBC04; }
+      .g-green-bar { fill: #34A853; }
+
+      .pill-grey { fill: #F1F3F4; stroke: #BDC1C6; stroke-width: 1; }
+      .pill-yellow { fill: #FEF7E0; stroke: #FDE293; stroke-width: 1; }
+      .pill-blue { fill: #E8F0FE; stroke: #AECBFA; stroke-width: 1; }
+      .pill-green { fill: #E6F4EA; stroke: #A8DAB5; stroke-width: 1; }
+
+      .txt-sec { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px; font-weight: 700; fill: #5F6368; letter-spacing: 0.08em; }
+      .txt-title { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; font-weight: 700; fill: #202124; }
+      .txt-title-blue { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; font-weight: 700; fill: #1A73E8; }
+      .txt-sub { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11.5px; fill: #5F6368; }
+      .txt-code { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 11px; fill: #3C4043; }
+      .txt-code-green { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 11px; fill: #137333; }
+
+      .txt-pill-grey { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 10px; font-weight: 700; fill: #3C4043; }
+      .txt-pill-yellow { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 10px; font-weight: 700; fill: #B06000; }
+      .txt-pill-blue { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 10px; font-weight: 700; fill: #174EA6; }
+      .txt-pill-green { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 10px; font-weight: 700; fill: #0D652D; }
+
+      .wire { stroke: #80868B; stroke-width: 1.5; fill: none; }
+      .wire-blue { stroke: #1A73E8; stroke-width: 1.5; fill: none; }
+      .arrow { fill: #80868B; }
+      .arrow-blue { fill: #1A73E8; }
+
+      @media (prefers-color-scheme: dark) {
+        .canvas { fill: #131314; stroke: #3C4043; }
+        .grid { stroke: #1E1F20; }
+        .card { fill: #1E1F20; stroke: #3C4043; }
+        .card-core { fill: #1E1F20; stroke: #8AB4F8; }
+        .subcard { fill: #131314; stroke: #3C4043; }
+        .code-box { fill: #131314; stroke: #3C4043; }
+        .divider { stroke: #3C4043; }
+
+        .pill-grey { fill: #282A2C; stroke: #5F6368; }
+        .pill-yellow { fill: #332607; stroke: #FDD663; }
+        .pill-blue { fill: #172B4D; stroke: #8AB4F8; }
+        .pill-green { fill: #0D2E1B; stroke: #81C995; }
+
+        .txt-sec { fill: #9AA0A6; }
+        .txt-title { fill: #E8EAED; }
+        .txt-title-blue { fill: #8AB4F8; }
+        .txt-sub { fill: #9AA0A6; }
+        .txt-code { fill: #BDC1C6; }
+        .txt-code-green { fill: #81C995; }
+
+        .txt-pill-grey { fill: #E8EAED; }
+        .txt-pill-yellow { fill: #FDD663; }
+        .txt-pill-blue { fill: #8AB4F8; }
+        .txt-pill-green { fill: #81C995; }
+
+        .wire { stroke: #9AA0A6; }
+        .wire-blue { stroke: #8AB4F8; }
+        .arrow { fill: #9AA0A6; }
+        .arrow-blue { fill: #8AB4F8; }
+      }
+    </style>
+    <pattern id="ggrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" class="grid"/>
+    </pattern>
+    <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 7 4 L 0 6.5 z" class="arrow"/>
     </marker>
+    <marker id="arr-b" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 7 4 L 0 6.5 z" class="arrow-blue"/>
+    </marker>
+    <clipPath id="canvas-clip">
+      <rect width="1080" height="500" rx="10"/>
+    </clipPath>
   </defs>
 
-  <rect width="960" height="390" rx="6" class="canvas"/>
+  <g clip-path="url(#canvas-clip)">
+    <rect width="1080" height="500" rx="10" class="canvas"/>
+    <rect width="1080" height="500" rx="10" fill="url(#ggrid)"/>
+
+    <!-- Google 4-Color Top Accent Strip -->
+    <rect x="0" y="0" width="270" height="4" class="g-blue-bar"/>
+    <rect x="270" y="0" width="270" height="4" class="g-red-bar"/>
+    <rect x="540" y="0" width="270" height="4" class="g-yellow-bar"/>
+    <rect x="810" y="0" width="270" height="4" class="g-green-bar"/>
+  </g>
+  <rect width="1080" height="500" rx="10" fill="none" class="canvas"/>
 
   <!-- Column Dividers -->
-  <line x1="296" y1="20" x2="296" y2="370" class="grid-line"/>
-  <line x1="644" y1="20" x2="644" y2="370" class="grid-line"/>
+  <line x1="339" y1="24" x2="339" y2="476" class="divider"/>
+  <line x1="751" y1="24" x2="751" y2="476" class="divider"/>
 
-  <!-- Column Headers -->
-  <text x="28" y="38" class="section">01 / INPUTS (CONFIGURATION PHASE)</text>
-  <text x="320" y="38" class="section">02 / GRAPH &amp; PATH CLASSIFIER</text>
-  <text x="668" y="38" class="section">03 / TASK SELECTOR OUTPUTS</text>
+  <!-- Section Headers -->
+  <text x="28" y="42" class="txt-sec">01 · INPUTS (CONFIGURATION PHASE)</text>
+  <text x="360" y="42" class="txt-sec">02 · GRAPH &amp; PATH CLASSIFIER</text>
+  <text x="772" y="42" class="txt-sec">03 · TASK SELECTOR OUTPUTS</text>
 
-  <!-- Left Column: Inputs -->
-  <rect x="28" y="56" width="244" height="86" rx="4" class="box"/>
-  <text x="42" y="78" class="code">GitChangedFilesValueSource</text>
-  <text x="42" y="96" class="desc">Gradle ValueSource API</text>
-  <rect x="42" y="106" width="216" height="24" rx="3" class="box-sub"/>
-  <text x="50" y="122" class="code-muted">git diff --name-only base...HEAD</text>
+  <!-- ==================== COLUMN 1: INPUTS ==================== -->
+  <!-- Input 1 -->
+  <rect x="28" y="60" width="290" height="124" rx="8" class="card"/>
+  <rect x="28" y="60" width="4" height="124" rx="2" class="g-blue-bar"/>
+  <text x="46" y="88" class="txt-title">GitChangedFilesValueSource</text>
+  <text x="46" y="108" class="txt-sub">Gradle ValueSource API (cache-safe)</text>
+  <rect x="46" y="122" width="256" height="44" rx="6" class="code-box"/>
+  <text x="58" y="148" class="txt-code">git diff --name-only base...HEAD</text>
 
-  <rect x="28" y="160" width="244" height="86" rx="4" class="box"/>
-  <text x="42" y="182" class="code">Reverse Dependency DAG</text>
-  <text x="42" y="200" class="desc">Serializable @Input MapProperty</text>
-  <rect x="42" y="210" width="216" height="24" rx="3" class="box-sub"/>
-  <text x="50" y="226" class="code-muted">Map&lt;Module, Set&lt;Dependent&gt;&gt;</text>
+  <!-- Input 2 -->
+  <rect x="28" y="204" width="290" height="124" rx="8" class="card"/>
+  <rect x="28" y="204" width="4" height="124" rx="2" class="g-yellow-bar"/>
+  <text x="46" y="232" class="txt-title">Reverse Dependency DAG</text>
+  <text x="46" y="252" class="txt-sub">Serializable @Input MapProperty</text>
+  <rect x="46" y="266" width="256" height="44" rx="6" class="code-box"/>
+  <text x="58" y="292" class="txt-code">Map&lt;Module, Set&lt;Dependent&gt;&gt;</text>
 
-  <rect x="28" y="264" width="244" height="86" rx="4" class="box"/>
-  <text x="42" y="286" class="code">AffectedModulesExtension</text>
-  <text x="42" y="304" class="desc">DSL &amp; -P CLI property conventions</text>
-  <rect x="42" y="314" width="216" height="24" rx="3" class="box-sub"/>
-  <text x="50" y="330" class="code-muted">ignoredPaths, globalPaths, baseRef</text>
+  <!-- Input 3 -->
+  <rect x="28" y="348" width="290" height="124" rx="8" class="card"/>
+  <rect x="28" y="348" width="4" height="124" rx="2" class="g-green-bar"/>
+  <text x="46" y="376" class="txt-title">AffectedModulesExtension</text>
+  <text x="46" y="396" class="txt-sub">DSL &amp; -P CLI property conventions</text>
+  <rect x="46" y="410" width="256" height="44" rx="6" class="code-box"/>
+  <text x="58" y="436" class="txt-code">baseRef, ignoredPaths, global</text>
 
-  <!-- Center Column: Calculator -->
-  <rect x="320" y="56" width="300" height="294" rx="4" class="box-core"/>
-  <text x="338" y="80" class="title">AffectedModuleCalculator</text>
-  <text x="338" y="97" class="desc">Stateless Kotlin seam (no Gradle runtime imports)</text>
+  <!-- ==================== COLUMN 2: CLASSIFIER ==================== -->
+  <rect x="360" y="60" width="370" height="412" rx="8" class="card-core"/>
+  <text x="380" y="90" class="txt-title-blue">AffectedModuleCalculator</text>
+  <text x="380" y="110" class="txt-sub">Pure Kotlin core seam (zero Gradle imports)</text>
 
-  <!-- 4 Rules inside Calculator -->
-  <rect x="338" y="112" width="264" height="48" rx="3" class="box-sub"/>
-  <rect x="348" y="122" width="68" height="18" rx="2" class="tag"/>
-  <text x="382" y="135" text-anchor="middle" class="code-muted">IGNORED</text>
-  <text x="426" y="134" class="code-muted">docs/**, *.md, .gitignore</text>
-  <text x="426" y="150" class="desc">Emits empty output (skips CI step)</text>
+  <!-- Rule 1: IGNORED -->
+  <rect x="378" y="128" width="334" height="72" rx="6" class="subcard"/>
+  <rect x="390" y="142" width="82" height="24" rx="4" class="pill-grey"/>
+  <text x="431" y="158" text-anchor="middle" class="txt-pill-grey">IGNORED</text>
+  <text x="484" y="156" class="txt-code">docs/**, *.md, .gitignore</text>
+  <text x="484" y="178" class="txt-sub">Outputs empty (skips CI step)</text>
 
-  <rect x="338" y="168" width="264" height="48" rx="3" class="box-sub"/>
-  <rect x="348" y="178" width="68" height="18" rx="2" class="tag"/>
-  <text x="382" y="191" text-anchor="middle" class="code-muted">GLOBAL</text>
-  <text x="426" y="190" class="code-muted">build-logic/**, libs.versions.toml</text>
-  <text x="426" y="206" class="desc">Selects all modules in project</text>
+  <!-- Rule 2: GLOBAL -->
+  <rect x="378" y="212" width="334" height="72" rx="6" class="subcard"/>
+  <rect x="390" y="226" width="82" height="24" rx="4" class="pill-yellow"/>
+  <text x="431" y="242" text-anchor="middle" class="txt-pill-yellow">GLOBAL</text>
+  <text x="484" y="240" class="txt-code">build-logic/**, *.versions.toml</text>
+  <text x="484" y="262" class="txt-sub">Selects all project modules</text>
 
-  <rect x="338" y="224" width="264" height="48" rx="3" class="box-sub"/>
-  <rect x="348" y="234" width="68" height="18" rx="2" class="tag-blue"/>
-  <text x="382" y="247" text-anchor="middle" class="code-blue">TEST-ONLY</text>
-  <text x="426" y="246" class="code-muted">src/test/** or src/androidTest/**</text>
-  <text x="426" y="262" class="desc">Target module only (no DAG propagation)</text>
+  <!-- Rule 3: TEST-ONLY -->
+  <rect x="378" y="296" width="334" height="72" rx="6" class="subcard"/>
+  <rect x="390" y="310" width="82" height="24" rx="4" class="pill-blue"/>
+  <text x="431" y="326" text-anchor="middle" class="txt-pill-blue">TEST-ONLY</text>
+  <text x="484" y="324" class="txt-code">src/test/**, src/androidTest/**</text>
+  <text x="484" y="346" class="txt-sub">Single module (no propagation)</text>
 
-  <rect x="338" y="280" width="264" height="52" rx="3" class="box-sub"/>
-  <rect x="348" y="290" width="68" height="18" rx="2" class="tag-blue"/>
-  <text x="382" y="303" text-anchor="middle" class="code-blue">MAIN CODE</text>
-  <text x="426" y="302" class="code-muted">src/main/**, build.gradle.kts</text>
-  <text x="426" y="318" class="desc">BFS traversal over reverseDependencies</text>
+  <!-- Rule 4: MAIN CODE -->
+  <rect x="378" y="380" width="334" height="72" rx="6" class="subcard"/>
+  <rect x="390" y="394" width="82" height="24" rx="4" class="pill-green"/>
+  <text x="431" y="410" text-anchor="middle" class="txt-pill-green">MAIN CODE</text>
+  <text x="484" y="408" class="txt-code">src/main/**, build.gradle.kts</text>
+  <text x="484" y="430" class="txt-sub">BFS on reverseDependencies DAG</text>
 
-  <!-- Right Column: 4 Tasks -->
-  <rect x="668" y="56" width="264" height="62" rx="4" class="box"/>
-  <text x="684" y="80" class="code">printAffectedTestTasks</text>
-  <text x="684" y="100" class="code-muted">:mod:testDebugUnitTest  :dom:test</text>
+  <!-- ==================== COLUMN 3: OUTPUTS ==================== -->
+  <!-- Output 1 -->
+  <rect x="772" y="60" width="280" height="90" rx="8" class="card"/>
+  <rect x="772" y="60" width="4" height="90" rx="2" class="g-blue-bar"/>
+  <text x="790" y="92" class="txt-title">printAffectedTestTasks</text>
+  <text x="790" y="120" class="txt-code-green">:mod:testDebugUnitTest :dom:test</text>
 
-  <rect x="668" y="133" width="264" height="62" rx="4" class="box"/>
-  <text x="684" y="157" class="code">printAffectedScreenshotTasks</text>
-  <text x="684" y="177" class="code-muted">:feature:*:verifyRoborazziDebug</text>
+  <!-- Output 2 -->
+  <rect x="772" y="167" width="280" height="90" rx="8" class="card"/>
+  <rect x="772" y="167" width="4" height="90" rx="2" class="g-green-bar"/>
+  <text x="790" y="199" class="txt-title">printAffectedScreenshotTasks</text>
+  <text x="790" y="227" class="txt-code-green">:feature:*:verifyRoborazziDebug</text>
 
-  <rect x="668" y="210" width="264" height="62" rx="4" class="box"/>
-  <text x="684" y="234" class="code">printAffectedAndroidTestTasks</text>
-  <text x="684" y="254" class="code-muted">:app:connectedDebugAndroidTest</text>
+  <!-- Output 3 -->
+  <rect x="772" y="274" width="280" height="90" rx="8" class="card"/>
+  <rect x="772" y="274" width="4" height="90" rx="2" class="g-yellow-bar"/>
+  <text x="790" y="306" class="txt-title">printAffectedAndroidTestTasks</text>
+  <text x="790" y="334" class="txt-code-green">:app:connectedDebugAndroidTest</text>
 
-  <rect x="668" y="288" width="264" height="62" rx="4" class="box"/>
-  <text x="684" y="312" class="code">printAffectedLintTasks</text>
-  <text x="684" y="332" class="code-muted">:mod:lintRelease  :domain:lint</text>
+  <!-- Output 4 -->
+  <rect x="772" y="381" width="280" height="91" rx="8" class="card"/>
+  <rect x="772" y="381" width="4" height="91" rx="2" class="g-red-bar"/>
+  <text x="790" y="413" class="txt-title">printAffectedLintTasks</text>
+  <text x="790" y="441" class="txt-code-green">:mod:lintRelease :domain:lint</text>
 
-  <!-- Connectors Left -> Center -->
-  <path d="M 272 99 L 318 99" class="connector" marker-end="url(#arr)"/>
-  <path d="M 272 203 L 318 203" class="connector" marker-end="url(#arr)"/>
-  <path d="M 272 307 L 318 307" class="connector" marker-end="url(#arr)"/>
+  <!-- ==================== CONNECTORS ==================== -->
+  <path d="M 318 122 L 357 122" class="wire" marker-end="url(#arr)"/>
+  <path d="M 318 266 L 357 266" class="wire" marker-end="url(#arr)"/>
+  <path d="M 318 410 L 357 410" class="wire" marker-end="url(#arr)"/>
 
-  <!-- Connectors Center -> Right -->
-  <path d="M 620 135 L 644 135 L 644 87 L 666 87" class="connector" marker-end="url(#arr)"/>
-  <path d="M 620 185 L 644 185 L 644 164 L 666 164" class="connector" marker-end="url(#arr)"/>
-  <path d="M 620 241 L 666 241" class="connector" marker-end="url(#arr)"/>
-  <path d="M 620 319 L 666 319" class="connector" marker-end="url(#arr)"/>
+  <path d="M 730 164 L 751 164 L 751 105 L 769 105" class="wire-blue" marker-end="url(#arr-b)"/>
+  <path d="M 730 248 L 751 248 L 751 212 L 769 212" class="wire-blue" marker-end="url(#arr-b)"/>
+  <path d="M 730 332 L 751 332 L 751 319 L 769 319" class="wire-blue" marker-end="url(#arr-b)"/>
+  <path d="M 730 416 L 751 416 L 751 426 L 769 426" class="wire-blue" marker-end="url(#arr-b)"/>
 </svg>

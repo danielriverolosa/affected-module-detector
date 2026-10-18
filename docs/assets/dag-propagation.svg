@@ -1,142 +1,191 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" width="100%" height="100%">
-  <style>
-    .canvas { fill: #FAFAFA; stroke: #E4E4E7; stroke-width: 1; }
-    .divider { stroke: #D4D4D8; stroke-width: 1; stroke-dasharray: 4 4; }
-    .heading { font: 600 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #18181B; }
-    .sub { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #52525B; }
-    .node-skip { fill: #FFFFFF; stroke: #D4D4D8; stroke-width: 1; stroke-dasharray: 3 3; }
-    .node-active { fill: #EFF6FF; stroke: #2563EB; stroke-width: 1.5; }
-    .node-dep { fill: #FFFFFF; stroke: #18181B; stroke-width: 1.5; }
-    .label-skip { font: 500 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #A1A1AA; }
-    .label-active { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1D4ED8; }
-    .label-dep { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #18181B; }
-    .status-skip { font: 500 9px -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0.05em; fill: #A1A1AA; }
-    .status-active { font: 600 9px -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0.05em; fill: #1D4ED8; }
-    .status-dep { font: 600 9px -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0.05em; fill: #52525B; }
-    .edge-skip { stroke: #D4D4D8; stroke-width: 1; fill: none; }
-    .edge-active { stroke: #18181B; stroke-width: 1.5; fill: none; }
-    .arr-skip { fill: #D4D4D8; }
-    .arr-active { fill: #18181B; }
-    .footer { fill: #F4F4F5; stroke: #E4E4E7; stroke-width: 1; }
-    .block-pill { fill: #FEF2F2; stroke: #FECACA; stroke-width: 1; }
-    .block-text { font: 600 9px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #B91C1C; }
-    @media (prefers-color-scheme: dark) {
-      .canvas { fill: #0D1117; stroke: #30363D; }
-      .divider { stroke: #30363D; }
-      .heading { fill: #E6EDF3; }
-      .sub { fill: #8B949E; }
-      .node-skip { fill: #0D1117; stroke: #30363D; }
-      .node-active { fill: #121D2F; stroke: #388BFD; }
-      .node-dep { fill: #161B22; stroke: #E6EDF3; }
-      .label-skip { fill: #484F58; }
-      .label-active { fill: #58A6FF; }
-      .label-dep { fill: #E6EDF3; }
-      .status-skip { fill: #484F58; }
-      .status-active { fill: #58A6FF; }
-      .status-dep { fill: #8B949E; }
-      .edge-skip { stroke: #30363D; }
-      .edge-active { stroke: #E6EDF3; }
-      .arr-skip { fill: #30363D; }
-      .arr-active { fill: #E6EDF3; }
-      .footer { fill: #161B22; stroke: #30363D; }
-      .block-pill { fill: #2D1215; stroke: #F85149; }
-      .block-text { fill: #FF7B72; }
-    }
-  </style>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 420" width="100%" height="100%">
   <defs>
-    <marker id="aSkip" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M 0 1 L 7 4 L 0 7 z" class="arr-skip"/>
+    <style>
+      .canvas { fill: #F8F9FA; stroke: #DADCE0; stroke-width: 1; }
+      .grid { stroke: #E8EAED; stroke-width: 1; }
+      .divider { stroke: #DADCE0; stroke-width: 1; stroke-dasharray: 4 4; }
+
+      .g-blue-bar { fill: #4285F4; }
+      .g-red-bar { fill: #EA4335; }
+      .g-yellow-bar { fill: #FBBC04; }
+      .g-green-bar { fill: #34A853; }
+
+      .node-mod { fill: #E6F4EA; stroke: #1E8E3E; stroke-width: 1.5; }
+      .node-dep { fill: #E8F0FE; stroke: #1A73E8; stroke-width: 1.5; }
+      .node-test { fill: #FEF7E0; stroke: #F9AB00; stroke-width: 1.5; }
+      .node-skip { fill: #FFFFFF; stroke: #DADCE0; stroke-width: 1; stroke-dasharray: 4 3; }
+      .badge-stop { fill: #FCE8E6; stroke: #D93025; stroke-width: 1; }
+      .summary { fill: #FFFFFF; stroke: #DADCE0; stroke-width: 1; }
+
+      .txt-h { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; font-weight: 700; fill: #202124; }
+      .txt-diff { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 11px; fill: #5F6368; }
+
+      .txt-mod { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 12px; font-weight: 700; fill: #0D652D; }
+      .txt-mod-sub { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 9.5px; font-weight: 700; fill: #1E8E3E; letter-spacing: 0.04em; }
+
+      .txt-dep { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 12px; font-weight: 700; fill: #174EA6; }
+      .txt-dep-sub { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 9.5px; font-weight: 700; fill: #1A73E8; letter-spacing: 0.04em; }
+
+      .txt-test { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 12px; font-weight: 700; fill: #B06000; }
+      .txt-test-sub { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 9.5px; font-weight: 700; fill: #E37400; letter-spacing: 0.04em; }
+
+      .txt-skip { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 11.5px; fill: #80868B; }
+      .txt-skip-sub { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 9.5px; font-weight: 600; fill: #9AA0A6; letter-spacing: 0.04em; }
+
+      .txt-stop { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 9.5px; font-weight: 700; fill: #C5221F; letter-spacing: 0.05em; }
+      .txt-sum { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, monospace; font-size: 11px; fill: #202124; }
+
+      .edge-idle { stroke: #DADCE0; stroke-width: 1.25; fill: none; }
+      .edge-prop { stroke: #1A73E8; stroke-width: 1.75; fill: none; }
+      .edge-block { stroke: #D93025; stroke-width: 1.25; stroke-dasharray: 4 4; fill: none; }
+      .arr-idle { fill: #DADCE0; }
+      .arr-prop { fill: #1A73E8; }
+
+      @media (prefers-color-scheme: dark) {
+        .canvas { fill: #131314; stroke: #3C4043; }
+        .grid { stroke: #1E1F20; }
+        .divider { stroke: #3C4043; }
+
+        .node-mod { fill: #0D2E1B; stroke: #81C995; }
+        .node-dep { fill: #172B4D; stroke: #8AB4F8; }
+        .node-test { fill: #332607; stroke: #FDD663; }
+        .node-skip { fill: #1E1F20; stroke: #3C4043; }
+        .badge-stop { fill: #381314; stroke: #F28B82; }
+        .summary { fill: #1E1F20; stroke: #3C4043; }
+
+        .txt-h { fill: #E8EAED; }
+        .txt-diff { fill: #9AA0A6; }
+
+        .txt-mod { fill: #81C995; }
+        .txt-mod-sub { fill: #A8DAB5; }
+        .txt-dep { fill: #8AB4F8; }
+        .txt-dep-sub { fill: #AECBFA; }
+        .txt-test { fill: #FDD663; }
+        .txt-test-sub { fill: #FDE293; }
+        .txt-skip { fill: #5F6368; }
+        .txt-skip-sub { fill: #5F6368; }
+        .txt-stop { fill: #F28B82; }
+        .txt-sum { fill: #E8EAED; }
+
+        .edge-idle { stroke: #3C4043; }
+        .edge-prop { stroke: #8AB4F8; }
+        .edge-block { stroke: #F28B82; }
+        .arr-idle { fill: #3C4043; }
+        .arr-prop { fill: #8AB4F8; }
+      }
+    </style>
+    <pattern id="ggrid2" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" class="grid"/>
+    </pattern>
+    <marker id="ai" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 1.5 L 7 4 L 0 6.5 z" class="arr-idle"/>
     </marker>
-    <marker id="aAct" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M 0 1 L 7 4 L 0 7 z" class="arr-active"/>
+    <marker id="ap" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 7 4 L 0 6.5 z" class="arr-prop"/>
     </marker>
+    <clipPath id="cclip2">
+      <rect width="1080" height="420" rx="10"/>
+    </clipPath>
   </defs>
 
-  <rect width="960" height="390" rx="6" class="canvas"/>
-  <line x1="480" y1="20" x2="480" y2="370" class="divider"/>
+  <g clip-path="url(#cclip2)">
+    <rect width="1080" height="420" rx="10" class="canvas"/>
+    <rect width="1080" height="420" rx="10" fill="url(#ggrid2)"/>
+    <rect x="0" y="0" width="270" height="4" class="g-blue-bar"/>
+    <rect x="270" y="0" width="270" height="4" class="g-red-bar"/>
+    <rect x="540" y="0" width="270" height="4" class="g-yellow-bar"/>
+    <rect x="810" y="0" width="270" height="4" class="g-green-bar"/>
+  </g>
+  <rect width="1080" height="420" rx="10" fill="none" class="canvas"/>
 
-  <!-- ================= CASE A: PRODUCTION CHANGE ================= -->
-  <text x="28" y="38" class="heading">Case A — Production Source Change (src/main)</text>
-  <text x="28" y="56" class="sub">diff: feature/checkout/src/main/kotlin/CheckoutScreen.kt</text>
+  <line x1="540" y1="24" x2="540" y2="396" class="divider"/>
+
+  <!-- ==================== CASE A ==================== -->
+  <text x="28" y="42" class="txt-h">Case A · Production Source Change (src/main)</text>
+  <text x="28" y="62" class="txt-diff">diff: feature/checkout/src/main/kotlin/CheckoutScreen.kt</text>
+
+  <!-- :app (Dependent) -->
+  <rect x="200" y="86" width="144" height="52" rx="8" class="node-dep"/>
+  <text x="272" y="109" text-anchor="middle" class="txt-dep">:app</text>
+  <text x="272" y="126" text-anchor="middle" class="txt-dep-sub">DEPENDENT (RUNS)</text>
+
+  <!-- Middle tier -->
+  <rect x="28" y="192" width="148" height="52" rx="8" class="node-skip"/>
+  <text x="102" y="215" text-anchor="middle" class="txt-skip">:feature:catalog</text>
+  <text x="102" y="232" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
+
+  <rect x="198" y="192" width="148" height="52" rx="8" class="node-skip"/>
+  <text x="272" y="215" text-anchor="middle" class="txt-skip">:feature:home</text>
+  <text x="272" y="232" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
+
+  <rect x="368" y="192" width="148" height="52" rx="8" class="node-mod"/>
+  <text x="442" y="215" text-anchor="middle" class="txt-mod">:feature:checkout</text>
+  <text x="442" y="232" text-anchor="middle" class="txt-mod-sub">MODIFIED (RUNS)</text>
+
+  <!-- Bottom tier -->
+  <rect x="114" y="294" width="136" height="46" rx="8" class="node-skip"/>
+  <text x="182" y="314" text-anchor="middle" class="txt-skip">:domain</text>
+  <text x="182" y="330" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
+
+  <rect x="294" y="294" width="136" height="46" rx="8" class="node-skip"/>
+  <text x="362" y="314" text-anchor="middle" class="txt-skip">:core:ui</text>
+  <text x="362" y="330" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
 
   <!-- Edges Case A -->
-  <line x1="240" y1="132" x2="105" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="240" y1="132" x2="240" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="240" y1="132" x2="375" y2="196" class="edge-active" marker-end="url(#aAct)"/>
-  <line x1="105" y1="244" x2="170" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="240" y1="244" x2="240" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="375" y1="244" x2="310" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
+  <path d="M 272 138 L 102 189" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 272 138 L 272 189" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 272 138 L 442 189" class="edge-prop" marker-end="url(#ap)"/>
+  <path d="M 102 244 L 182 291" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 272 244 L 272 291" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 442 244 L 362 291" class="edge-idle" marker-end="url(#ai)"/>
 
-  <!-- Nodes Case A -->
-  <rect x="180" y="84" width="120" height="48" rx="4" class="node-dep"/>
-  <text x="240" y="105" text-anchor="middle" class="label-dep">:app</text>
-  <text x="240" y="121" text-anchor="middle" class="status-dep">DEPENDENT (RUNS)</text>
+  <rect x="28" y="358" width="488" height="38" rx="6" class="summary"/>
+  <rect x="28" y="358" width="4" height="38" rx="2" class="g-blue-bar"/>
+  <text x="44" y="381" class="txt-sum">Tasks: :app:testDebugUnitTest :feature:checkout:testDebugUnitTest</text>
 
-  <rect x="45" y="196" width="120" height="48" rx="4" class="node-skip"/>
-  <text x="105" y="217" text-anchor="middle" class="label-skip">:feature:catalog</text>
-  <text x="105" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
+  <!-- ==================== CASE B ==================== -->
+  <text x="564" y="42" class="txt-h">Case B · Unit Test Change Only (src/test)</text>
+  <text x="564" y="62" class="txt-diff">diff: data/src/test/kotlin/OrderRepositoryTest.kt</text>
 
-  <rect x="180" y="196" width="120" height="48" rx="4" class="node-skip"/>
-  <text x="240" y="217" text-anchor="middle" class="label-skip">:feature:home</text>
-  <text x="240" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
+  <!-- :app (Skipped) -->
+  <rect x="736" y="86" width="144" height="52" rx="8" class="node-skip"/>
+  <text x="808" y="109" text-anchor="middle" class="txt-skip">:app</text>
+  <text x="808" y="126" text-anchor="middle" class="txt-skip-sub">SKIPPED (ABI INTACT)</text>
 
-  <rect x="315" y="196" width="125" height="48" rx="4" class="node-active"/>
-  <text x="377" y="217" text-anchor="middle" class="label-active">:feature:checkout</text>
-  <text x="377" y="233" text-anchor="middle" class="status-active">MODIFIED (RUNS)</text>
+  <!-- Middle tier -->
+  <rect x="564" y="192" width="148" height="52" rx="8" class="node-test"/>
+  <text x="638" y="215" text-anchor="middle" class="txt-test">:data</text>
+  <text x="638" y="232" text-anchor="middle" class="txt-test-sub">TEST ONLY (0 LINT)</text>
 
-  <rect x="115" y="296" width="110" height="42" rx="4" class="node-skip"/>
-  <text x="170" y="315" text-anchor="middle" class="label-skip">:domain</text>
-  <text x="170" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
+  <rect x="734" y="192" width="148" height="52" rx="8" class="node-skip"/>
+  <text x="808" y="215" text-anchor="middle" class="txt-skip">:feature:catalog</text>
+  <text x="808" y="232" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
 
-  <rect x="255" y="296" width="110" height="42" rx="4" class="node-skip"/>
-  <text x="310" y="315" text-anchor="middle" class="label-skip">:core:ui</text>
-  <text x="310" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
+  <rect x="904" y="192" width="148" height="52" rx="8" class="node-skip"/>
+  <text x="978" y="215" text-anchor="middle" class="txt-skip">:feature:checkout</text>
+  <text x="978" y="232" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
 
-  <rect x="28" y="350" width="424" height="24" rx="3" class="footer"/>
-  <text x="38" y="366" class="sub">Tasks: :app:testDebugUnitTest :feature:checkout:testDebugUnitTest</text>
+  <!-- Bottom tier -->
+  <rect x="650" y="294" width="136" height="46" rx="8" class="node-skip"/>
+  <text x="718" y="314" text-anchor="middle" class="txt-skip">:core:data</text>
+  <text x="718" y="330" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
 
-  <!-- ================= CASE B: TEST-ONLY CHANGE ================= -->
-  <text x="508" y="38" class="heading">Case B — Unit Test Change Only (src/test)</text>
-  <text x="508" y="56" class="sub">diff: data/src/test/kotlin/OrderRepositoryTest.kt</text>
+  <rect x="830" y="294" width="136" height="46" rx="8" class="node-skip"/>
+  <text x="898" y="314" text-anchor="middle" class="txt-skip">:domain</text>
+  <text x="898" y="330" text-anchor="middle" class="txt-skip-sub">SKIPPED</text>
 
   <!-- Edges Case B -->
-  <line x1="720" y1="132" x2="585" y2="196" class="edge-skip" stroke-dasharray="3 3"/>
-  <line x1="720" y1="132" x2="720" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="720" y1="132" x2="855" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="585" y1="244" x2="650" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="720" y1="244" x2="720" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
-  <line x1="855" y1="244" x2="790" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
+  <path d="M 808 138 L 638 189" class="edge-block"/>
+  <rect x="656" y="152" width="122" height="22" rx="4" class="badge-stop"/>
+  <text x="717" y="167" text-anchor="middle" class="txt-stop">NO PROPAGATION</text>
 
-  <!-- Stop propagation badge -->
-  <rect x="595" y="152" width="104" height="18" rx="3" class="block-pill"/>
-  <text x="647" y="164" text-anchor="middle" class="block-text">NO PROPAGATION</text>
+  <path d="M 808 138 L 808 189" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 808 138 L 978 189" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 638 244 L 718 291" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 808 244 L 808 291" class="edge-idle" marker-end="url(#ai)"/>
+  <path d="M 978 244 L 898 291" class="edge-idle" marker-end="url(#ai)"/>
 
-  <!-- Nodes Case B -->
-  <rect x="660" y="84" width="120" height="48" rx="4" class="node-skip"/>
-  <text x="720" y="105" text-anchor="middle" class="label-skip">:app</text>
-  <text x="720" y="121" text-anchor="middle" class="status-skip">SKIPPED (ABI INTACT)</text>
-
-  <rect x="525" y="196" width="120" height="48" rx="4" class="node-active"/>
-  <text x="585" y="217" text-anchor="middle" class="label-active">:data</text>
-  <text x="585" y="233" text-anchor="middle" class="status-active">TEST ONLY (0 LINT)</text>
-
-  <rect x="660" y="196" width="120" height="48" rx="4" class="node-skip"/>
-  <text x="720" y="217" text-anchor="middle" class="label-skip">:feature:catalog</text>
-  <text x="720" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
-
-  <rect x="795" y="196" width="125" height="48" rx="4" class="node-skip"/>
-  <text x="857" y="217" text-anchor="middle" class="label-skip">:feature:checkout</text>
-  <text x="857" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
-
-  <rect x="595" y="296" width="110" height="42" rx="4" class="node-skip"/>
-  <text x="650" y="315" text-anchor="middle" class="label-skip">:core:data</text>
-  <text x="650" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
-
-  <rect x="735" y="296" width="110" height="42" rx="4" class="node-skip"/>
-  <text x="790" y="315" text-anchor="middle" class="label-skip">:domain</text>
-  <text x="790" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
-
-  <rect x="508" y="350" width="424" height="24" rx="3" class="footer"/>
-  <text x="518" y="366" class="sub">Tasks: :data:testDebugUnitTest   (Lint Tasks: none)</text>
+  <rect x="564" y="358" width="488" height="38" rx="6" class="summary"/>
+  <rect x="564" y="358" width="4" height="38" rx="2" class="g-yellow-bar"/>
+  <text x="580" y="381" class="txt-sum">Tasks: :data:testDebugUnitTest (Lint Tasks: none)</text>
 </svg>

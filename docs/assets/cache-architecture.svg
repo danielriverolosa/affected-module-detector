@@ -1,78 +1,109 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 280" width="100%" height="100%">
-  <style>
-    .canvas { fill: #FAFAFA; stroke: #E4E4E7; stroke-width: 1; }
-    .lane { fill: #FFFFFF; stroke: #D4D4D8; stroke-width: 1; }
-    .step { fill: #F4F4F5; stroke: #D4D4D8; stroke-width: 1; }
-    .step-bad { fill: #FEF2F2; stroke: #FCA5A5; stroke-width: 1.2; }
-    .step-good { fill: #EFF6FF; stroke: #93C5FD; stroke-width: 1.2; }
-    .label-lane { font: 600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 0.05em; fill: #52525B; }
-    .code { font: 600 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #18181B; }
-    .code-bad { font: 600 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #B91C1C; }
-    .code-good { font: 600 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1D4ED8; }
-    .desc { font: 400 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #52525B; }
-    .line { stroke: #71717A; stroke-width: 1.2; fill: none; }
-    .arr { fill: #71717A; }
-    @media (prefers-color-scheme: dark) {
-      .canvas { fill: #0D1117; stroke: #30363D; }
-      .lane { fill: #161B22; stroke: #30363D; }
-      .step { fill: #0D1117; stroke: #30363D; }
-      .step-bad { fill: #2D1215; stroke: #F85149; }
-      .step-good { fill: #121D2F; stroke: #388BFD; }
-      .label-lane { fill: #8B949E; }
-      .code { fill: #E6EDF3; }
-      .code-bad { fill: #FF7B72; }
-      .code-good { fill: #58A6FF; }
-      .desc { fill: #8B949E; }
-      .line { stroke: #8B949E; }
-      .arr { fill: #8B949E; }
-    }
-  </style>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 340" width="100%" height="100%">
   <defs>
-    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M 0 1 L 7 4 L 0 7 z" class="arr"/>
+    <style>
+      .canvas { fill: #F8F9FA; stroke: #DADCE0; stroke-width: 1; }
+      .grid { stroke: #E8EAED; stroke-width: 1; }
+      .lane { fill: #FFFFFF; stroke: #DADCE0; stroke-width: 1; }
+      .box { fill: #F8F9FA; stroke: #DADCE0; stroke-width: 1; }
+      .box-bad { fill: #FCE8E6; stroke: #D93025; stroke-width: 1.5; }
+      .box-good { fill: #E6F4EA; stroke: #1E8E3E; stroke-width: 1.5; }
+
+      .g-blue-bar { fill: #4285F4; }
+      .g-red-bar { fill: #EA4335; }
+      .g-yellow-bar { fill: #FBBC04; }
+      .g-green-bar { fill: #34A853; }
+
+      .txt-lane-bad { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px; font-weight: 700; fill: #C5221F; letter-spacing: 0.07em; }
+      .txt-lane-good { font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px; font-weight: 700; fill: #137333; letter-spacing: 0.07em; }
+      .txt-code { font-family: 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 13px; font-weight: 700; fill: #202124; }
+      .txt-bad { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 14px; font-weight: 700; fill: #A50E0E; }
+      .txt-good { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 14px; font-weight: 700; fill: #0D652D; }
+      .txt-sub { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; fill: #5F6368; }
+      .txt-sub-bad { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; fill: #A50E0E; }
+      .txt-sub-good { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; fill: #0D652D; }
+
+      .wire { stroke: #80868B; stroke-width: 1.5; fill: none; }
+      .arr { fill: #80868B; }
+
+      @media (prefers-color-scheme: dark) {
+        .canvas { fill: #131314; stroke: #3C4043; }
+        .grid { stroke: #1E1F20; }
+        .lane { fill: #1E1F20; stroke: #3C4043; }
+        .box { fill: #131314; stroke: #3C4043; }
+        .box-bad { fill: #381314; stroke: #F28B82; }
+        .box-good { fill: #0D2E1B; stroke: #81C995; }
+
+        .txt-lane-bad { fill: #F28B82; }
+        .txt-lane-good { fill: #81C995; }
+        .txt-code { fill: #E8EAED; }
+        .txt-bad { fill: #F28B82; }
+        .txt-good { fill: #81C995; }
+        .txt-sub { fill: #9AA0A6; }
+        .txt-sub-bad { fill: #F6AEA9; }
+        .txt-sub-good { fill: #A8DAB5; }
+
+        .wire { stroke: #9AA0A6; }
+        .arr { fill: #9AA0A6; }
+      }
+    </style>
+    <pattern id="ggrid3" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" class="grid"/>
+    </pattern>
+    <marker id="a3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 7 4 L 0 6.5 z" class="arr"/>
     </marker>
+    <clipPath id="cclip3">
+      <rect width="1080" height="340" rx="10"/>
+    </clipPath>
   </defs>
 
-  <rect width="960" height="280" rx="6" class="canvas"/>
+  <g clip-path="url(#cclip3)">
+    <rect width="1080" height="340" rx="10" class="canvas"/>
+    <rect width="1080" height="340" rx="10" fill="url(#ggrid3)"/>
+    <rect x="0" y="0" width="270" height="4" class="g-blue-bar"/>
+    <rect x="270" y="0" width="270" height="4" class="g-red-bar"/>
+    <rect x="540" y="0" width="270" height="4" class="g-yellow-bar"/>
+    <rect x="810" y="0" width="270" height="4" class="g-green-bar"/>
+  </g>
+  <rect width="1080" height="340" rx="10" fill="none" class="canvas"/>
 
-  <!-- Top Lane: Legacy -->
-  <rect x="24" y="20" width="912" height="110" rx="4" class="lane"/>
-  <text x="40" y="42" class="label-lane">LEGACY APPROACH (EVALUATION-TIME TASK MUTATION)</text>
+  <!-- ==================== LANE 1: LEGACY ==================== -->
+  <rect x="28" y="24" width="1024" height="134" rx="8" class="lane"/>
+  <rect x="28" y="24" width="4" height="134" rx="2" class="g-red-bar"/>
+  <text x="48" y="48" class="txt-lane-bad">LEGACY APPROACH · EVALUATION-TIME TASK MUTATION (ANTI-PATTERN)</text>
 
-  <rect x="40" y="54" width="250" height="60" rx="3" class="step"/>
-  <text x="56" y="78" class="code">afterEvaluate { exec("git") }</text>
-  <text x="56" y="98" class="desc">Runs external process during config</text>
+  <rect x="48" y="64" width="290" height="76" rx="6" class="box"/>
+  <text x="66" y="95" class="txt-code">afterEvaluate { exec("git") }</text>
+  <text x="66" y="120" class="txt-sub">Runs external process during config</text>
 
-  <line x1="290" y1="84" x2="340" y2="84" class="line" marker-end="url(#arrow)"/>
+  <rect x="392" y="64" width="290" height="76" rx="6" class="box"/>
+  <text x="410" y="95" class="txt-code">task.enabled = false</text>
+  <text x="410" y="120" class="txt-sub">Mutates task graph per Git HEAD</text>
 
-  <rect x="342" y="54" width="260" height="60" rx="3" class="step"/>
-  <text x="358" y="78" class="code">task.enabled = false</text>
-  <text x="358" y="98" class="desc">Mutates task graph per Git HEAD</text>
+  <rect x="736" y="64" width="296" height="76" rx="6" class="box-bad"/>
+  <text x="754" y="95" class="txt-bad">Config Cache Invalidated</text>
+  <text x="754" y="120" class="txt-sub-bad">Reconfigures entire build every commit</text>
 
-  <line x1="602" y1="84" x2="652" y2="84" class="line" marker-end="url(#arrow)"/>
+  <path d="M 338 102 L 389 102" class="wire" marker-end="url(#a3)"/>
+  <path d="M 682 102 L 733 102" class="wire" marker-end="url(#a3)"/>
 
-  <rect x="654" y="54" width="264" height="60" rx="3" class="step-bad"/>
-  <text x="670" y="78" class="code-bad">Config Cache Invalidated</text>
-  <text x="670" y="98" class="desc">Reconfigures entire build every commit</text>
+  <!-- ==================== LANE 2: MODERN ==================== -->
+  <rect x="28" y="182" width="1024" height="134" rx="8" class="lane"/>
+  <rect x="28" y="182" width="4" height="134" rx="2" class="g-green-bar"/>
+  <text x="48" y="206" class="txt-lane-good">DECOUPLED TASK SELECTOR · VALUE SOURCE + SERIALIZABLE DAG INPUTS</text>
 
-  <!-- Bottom Lane: Decoupled Task Selector -->
-  <rect x="24" y="150" width="912" height="110" rx="4" class="lane"/>
-  <text x="40" y="172" class="label-lane">DECOUPLED TASK SELECTOR (VALUE SOURCE + SERIALIZABLE DAG INPUTS)</text>
+  <rect x="48" y="222" width="290" height="76" rx="6" class="box"/>
+  <text x="66" y="253" class="txt-code">ValueSource + MapProperty</text>
+  <text x="66" y="278" class="txt-sub">Lazy git diff &amp; immutable DAG @Input</text>
 
-  <rect x="40" y="184" width="250" height="60" rx="3" class="step"/>
-  <text x="56" y="208" class="code">ValueSource + MapProperty</text>
-  <text x="56" y="228" class="desc">Lazy git diff &amp; immutable DAG @Input</text>
+  <rect x="392" y="222" width="290" height="76" rx="6" class="box"/>
+  <text x="410" y="253" class="txt-code">printAffected*Tasks</text>
+  <text x="410" y="278" class="txt-sub">Outputs native task paths to stdout</text>
 
-  <line x1="290" y1="214" x2="340" y2="214" class="line" marker-end="url(#arrow)"/>
+  <rect x="736" y="222" width="296" height="76" rx="6" class="box-good"/>
+  <text x="754" y="253" class="txt-good">Config &amp; Build Cache Intact</text>
+  <text x="754" y="278" class="txt-sub-good">Reuses config cache &amp; AGP FROM-CACHE</text>
 
-  <rect x="342" y="184" width="260" height="60" rx="3" class="step"/>
-  <text x="358" y="208" class="code">printAffected*Tasks</text>
-  <text x="358" y="228" class="desc">Outputs native task paths to stdout</text>
-
-  <line x1="602" y1="214" x2="652" y2="214" class="line" marker-end="url(#arrow)"/>
-
-  <rect x="654" y="184" width="264" height="60" rx="3" class="step-good"/>
-  <text x="670" y="208" class="code-good">Config &amp; Build Cache Intact</text>
-  <text x="670" y="228" class="desc">Reuses config cache &amp; AGP FROM-CACHE</text>
+  <path d="M 338 260 L 389 260" class="wire" marker-end="url(#a3)"/>
+  <path d="M 682 260 L 733 260" class="wire" marker-end="url(#a3)"/>
 </svg>
