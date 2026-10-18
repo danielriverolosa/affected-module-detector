@@ -4,6 +4,8 @@ import java.io.Serializable
 
 data class AffectedAnalysisResult(
     val affectedTestModules: Set<String>,
+    val affectedAndroidTestModules: Set<String>,
+    val affectedScreenshotModules: Set<String>,
     val affectedLintModules: Set<String>,
 ) : Serializable
 
@@ -17,7 +19,12 @@ object AffectedModuleCalculator {
         globalPaths: List<String>,
     ): AffectedAnalysisResult {
         if (changedFiles.isEmpty()) {
-            return AffectedAnalysisResult(emptySet(), emptySet())
+            return AffectedAnalysisResult(
+                affectedTestModules = emptySet(),
+                affectedAndroidTestModules = emptySet(),
+                affectedScreenshotModules = emptySet(),
+                affectedLintModules = emptySet(),
+            )
         }
 
         val sortedModulesByDirDepth = moduleDirs.entries
@@ -25,7 +32,8 @@ object AffectedModuleCalculator {
             .sortedByDescending { it.value.length }
 
         val directMainModules = linkedSetOf<String>()
-        val directTestOnlyModules = linkedSetOf<String>()
+        val directUnitTestOnlyModules = linkedSetOf<String>()
+        val directAndroidTestOnlyModules = linkedSetOf<String>()
 
         for (rawFile in changedFiles) {
             val file = rawFile.trim().replace('\\', '/').removePrefix("./")
@@ -39,6 +47,8 @@ object AffectedModuleCalculator {
                 val allModules = moduleDirs.keys.toSortedSet()
                 return AffectedAnalysisResult(
                     affectedTestModules = allModules,
+                    affectedAndroidTestModules = allModules,
+                    affectedScreenshotModules = allModules,
                     affectedLintModules = allModules,
                 )
             }
@@ -51,27 +61,31 @@ object AffectedModuleCalculator {
             if (owningModuleEntry != null) {
                 val (modulePath, moduleDir) = owningModuleEntry
                 val relativeInModule = file.removePrefix("${moduleDir.trimEnd('/')}/")
-                if (isTestOnlyPath(relativeInModule)) {
-                    directTestOnlyModules += modulePath
-                } else {
-                    directMainModules += modulePath
+                when {
+                    isUnitTestOnlyPath(relativeInModule) -> directUnitTestOnlyModules += modulePath
+                    isAndroidTestOnlyPath(relativeInModule) -> directAndroidTestOnlyModules += modulePath
+                    else -> directMainModules += modulePath
                 }
             } else {
-                // Unknown root file not in ignoredPaths -> treat conservatively as global
                 val allModules = moduleDirs.keys.toSortedSet()
                 return AffectedAnalysisResult(
                     affectedTestModules = allModules,
+                    affectedAndroidTestModules = allModules,
+                    affectedScreenshotModules = allModules,
                     affectedLintModules = allModules,
                 )
             }
         }
 
         val transitiveMainModules = computeTransitiveClosure(directMainModules, reverseDependencies)
-        val finalTestModules = (transitiveMainModules + directTestOnlyModules).toSortedSet()
+        val finalUnitTestModules = (transitiveMainModules + directUnitTestOnlyModules).toSortedSet()
+        val finalAndroidTestModules = (transitiveMainModules + directAndroidTestOnlyModules).toSortedSet()
         val finalLintModules = transitiveMainModules.toSortedSet()
 
         return AffectedAnalysisResult(
-            affectedTestModules = finalTestModules,
+            affectedTestModules = finalUnitTestModules,
+            affectedAndroidTestModules = finalAndroidTestModules,
+            affectedScreenshotModules = finalUnitTestModules,
             affectedLintModules = finalLintModules,
         )
     }
@@ -95,9 +109,12 @@ object AffectedModuleCalculator {
         }
     }
 
-    private fun isTestOnlyPath(relativeInModule: String): Boolean {
-        return relativeInModule.startsWith("src/test/") ||
-            relativeInModule.startsWith("src/androidTest/")
+    private fun isUnitTestOnlyPath(relativeInModule: String): Boolean {
+        return relativeInModule.startsWith("src/test/")
+    }
+
+    private fun isAndroidTestOnlyPath(relativeInModule: String): Boolean {
+        return relativeInModule.startsWith("src/androidTest/")
     }
 
     private fun computeTransitiveClosure(

@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 
 class AffectedModuleCalculatorTest {
 
-    // Simulates LocationAlarm module layout
     private val moduleDirs = mapOf(
         ":app" to "app",
         ":domain" to "domain",
@@ -18,7 +17,6 @@ class AffectedModuleCalculatorTest {
         ":feature:settings" to "feature/settings",
     )
 
-    // Reverse dependency graph: module -> modules that directly depend on it
     private val reverseDependencies = mapOf(
         ":core:domain" to setOf(":domain", ":core:data", ":data", ":feature:home", ":feature:alarms", ":feature:settings", ":app"),
         ":domain" to setOf(":data", ":feature:alarms", ":feature:settings", ":app"),
@@ -52,6 +50,8 @@ class AffectedModuleCalculatorTest {
         )
 
         assertEquals(emptySet(), result.affectedTestModules)
+        assertEquals(emptySet(), result.affectedAndroidTestModules)
+        assertEquals(emptySet(), result.affectedScreenshotModules)
         assertEquals(emptySet(), result.affectedLintModules)
     }
 
@@ -66,6 +66,8 @@ class AffectedModuleCalculatorTest {
         )
 
         assertEquals(moduleDirs.keys, result.affectedTestModules)
+        assertEquals(moduleDirs.keys, result.affectedAndroidTestModules)
+        assertEquals(moduleDirs.keys, result.affectedScreenshotModules)
         assertEquals(moduleDirs.keys, result.affectedLintModules)
     }
 
@@ -80,11 +82,13 @@ class AffectedModuleCalculatorTest {
         )
 
         assertEquals(moduleDirs.keys, result.affectedTestModules)
+        assertEquals(moduleDirs.keys, result.affectedAndroidTestModules)
+        assertEquals(moduleDirs.keys, result.affectedScreenshotModules)
         assertEquals(moduleDirs.keys, result.affectedLintModules)
     }
 
     @Test
-    fun `when only src test in a module changes then only that module test is affected without propagating to dependents`() {
+    fun `when only src test in a module changes then only unit and screenshot tests for that module are affected`() {
         val result = AffectedModuleCalculator.calculate(
             changedFiles = listOf("data/src/test/java/com/locationalarm/data/dao/LocationAlarmDaoTest.kt"),
             moduleDirs = moduleDirs,
@@ -94,11 +98,29 @@ class AffectedModuleCalculatorTest {
         )
 
         assertEquals(setOf(":data"), result.affectedTestModules)
+        assertEquals(setOf(":data"), result.affectedScreenshotModules)
+        assertEquals(emptySet(), result.affectedAndroidTestModules)
         assertEquals(emptySet(), result.affectedLintModules)
     }
 
     @Test
-    fun `when leaf feature src main changes then only that feature and app are affected`() {
+    fun `when only src androidTest in a module changes then only androidTest for that module is affected`() {
+        val result = AffectedModuleCalculator.calculate(
+            changedFiles = listOf("app/src/androidTest/java/com/locationalarm/AppInstrumentedTest.kt"),
+            moduleDirs = moduleDirs,
+            reverseDependencies = reverseDependencies,
+            ignoredPaths = defaultIgnoredPaths,
+            globalPaths = defaultGlobalPaths,
+        )
+
+        assertEquals(emptySet(), result.affectedTestModules)
+        assertEquals(emptySet(), result.affectedScreenshotModules)
+        assertEquals(setOf(":app"), result.affectedAndroidTestModules)
+        assertEquals(emptySet(), result.affectedLintModules)
+    }
+
+    @Test
+    fun `when leaf feature src main changes then only that feature and app are affected across all task types`() {
         val result = AffectedModuleCalculator.calculate(
             changedFiles = listOf("feature/settings/src/main/java/com/locationalarm/feature/settings/SettingsScreen.kt"),
             moduleDirs = moduleDirs,
@@ -107,8 +129,11 @@ class AffectedModuleCalculatorTest {
             globalPaths = defaultGlobalPaths,
         )
 
-        assertEquals(setOf(":feature:settings", ":app"), result.affectedTestModules)
-        assertEquals(setOf(":feature:settings", ":app"), result.affectedLintModules)
+        val expected = setOf(":feature:settings", ":app")
+        assertEquals(expected, result.affectedTestModules)
+        assertEquals(expected, result.affectedAndroidTestModules)
+        assertEquals(expected, result.affectedScreenshotModules)
+        assertEquals(expected, result.affectedLintModules)
     }
 
     @Test
@@ -123,6 +148,8 @@ class AffectedModuleCalculatorTest {
 
         val expected = setOf(":domain", ":data", ":feature:alarms", ":feature:settings", ":app")
         assertEquals(expected, result.affectedTestModules)
+        assertEquals(expected, result.affectedAndroidTestModules)
+        assertEquals(expected, result.affectedScreenshotModules)
         assertEquals(expected, result.affectedLintModules)
     }
 
@@ -137,6 +164,7 @@ class AffectedModuleCalculatorTest {
         )
 
         assertEquals(setOf(":core:domain"), result.affectedTestModules)
+        assertEquals(emptySet(), result.affectedAndroidTestModules)
         assertEquals(emptySet(), result.affectedLintModules)
     }
 }
