@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.danielriverolosa.gradle"
-version = providers.gradleProperty("version").orElse("0.1.1").get()
+version = providers.gradleProperty("version").orElse("0.2.0").get()
 
 repositories {
     mavenCentral()
