@@ -42,9 +42,9 @@ Legacy plugins such as Dropbox's `AffectedModuleDetector` (archived in 2023) rel
 
 | Change Type | Example Path | Propagation Behavior | Tasks Emitted |
 | :--- | :--- | :--- | :--- |
-| **Ignored Paths** | `docs/ROADMAP.md`, `README.md`, `.gitignore` | Ignored | None (`""` — CI skips execution) |
+| **Ignored Paths** | `docs/ARCHITECTURE.md`, `README.md`, `.gitignore` | Ignored | None (`""` — CI skips execution) |
 | **Global Build Paths** | `build-logic/**`, `gradle/libs.versions.toml`, `build.gradle.kts`, `settings.gradle.kts` | All modules in repository | Unit Test, Screenshot, `androidTest` & Lint tasks for **all** applicable modules |
-| **Unit Test-Only Changes** | `feature/alarms/src/test/**` | **No propagation** (production ABI unchanged) | Unit & Screenshot tasks for the modified module only; **0** `androidTest` or Lint tasks |
+| **Unit Test-Only Changes** | `feature/checkout/src/test/**` | **No propagation** (production ABI unchanged) | Unit & Screenshot tasks for the modified module only; **0** `androidTest` or Lint tasks |
 | **Instrumented Test-Only Changes** | `app/src/androidTest/**` | **No propagation** (production ABI unchanged) | `androidTest` task for the modified module only; **0** unit test, screenshot, or Lint tasks |
 | **Production Changes** | `domain/src/main/**`, `domain/build.gradle.kts` | **Transitive BFS** up the reverse dependency DAG | Unit Test, Screenshot, `androidTest` & Lint tasks for the module + all direct and transitive dependents |
 
@@ -143,8 +143,8 @@ affectedModules {
 - `-PscreenshotTaskName=<task>`: Overrides the screenshot task name (e.g., `-PscreenshotTaskName=recordRoborazziDebug`).
 - `-PchangedFiles=<csv>`: Bypasses `git diff` and computes affected tasks for an explicit comma-separated list of relative paths:
   ```bash
-  ./gradlew -q printAffectedScreenshotTasks -PchangedFiles="feature/alarms/src/main/java/AlarmsScreen.kt" -PscreenshotTaskName=recordRoborazziDebug
-  # Output: :feature:alarms:recordRoborazziDebug
+  ./gradlew -q printAffectedScreenshotTasks -PchangedFiles="feature/checkout/src/main/kotlin/CheckoutScreen.kt" -PscreenshotTaskName=recordRoborazziDebug
+  # Output: :feature:checkout:recordRoborazziDebug
   ```
 
 ---

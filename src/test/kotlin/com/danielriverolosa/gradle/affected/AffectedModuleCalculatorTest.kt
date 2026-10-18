@@ -13,19 +13,19 @@ class AffectedModuleCalculatorTest {
         ":core:data" to "core/data",
         ":core:ui" to "core/ui",
         ":feature:home" to "feature/home",
-        ":feature:alarms" to "feature/alarms",
-        ":feature:settings" to "feature/settings",
+        ":feature:catalog" to "feature/catalog",
+        ":feature:checkout" to "feature/checkout",
     )
 
     private val reverseDependencies = mapOf(
-        ":core:domain" to setOf(":domain", ":core:data", ":data", ":feature:home", ":feature:alarms", ":feature:settings", ":app"),
-        ":domain" to setOf(":data", ":feature:alarms", ":feature:settings", ":app"),
+        ":core:domain" to setOf(":domain", ":core:data", ":data", ":feature:home", ":feature:catalog", ":feature:checkout", ":app"),
+        ":domain" to setOf(":data", ":feature:catalog", ":feature:checkout", ":app"),
         ":core:data" to setOf(":data", ":app"),
         ":data" to setOf(":app"),
-        ":core:ui" to setOf(":feature:home", ":feature:alarms", ":feature:settings", ":app"),
+        ":core:ui" to setOf(":feature:home", ":feature:catalog", ":feature:checkout", ":app"),
         ":feature:home" to setOf(":app"),
-        ":feature:alarms" to setOf(":app"),
-        ":feature:settings" to setOf(":app"),
+        ":feature:catalog" to setOf(":app"),
+        ":feature:checkout" to setOf(":app"),
         ":app" to emptySet(),
     )
 
@@ -42,7 +42,7 @@ class AffectedModuleCalculatorTest {
     @Test
     fun `when only ignored documentation files change then zero modules are affected`() {
         val result = AffectedModuleCalculator.calculate(
-            changedFiles = listOf("README.md", "CODING_STANDARDS.md", "docs/ROADMAP.md", ".gitignore"),
+            changedFiles = listOf("README.md", "CODING_STANDARDS.md", "docs/ARCHITECTURE.md", ".gitignore"),
             moduleDirs = moduleDirs,
             reverseDependencies = reverseDependencies,
             ignoredPaths = defaultIgnoredPaths,
@@ -90,7 +90,7 @@ class AffectedModuleCalculatorTest {
     @Test
     fun `when only src test in a module changes then only unit and screenshot tests for that module are affected`() {
         val result = AffectedModuleCalculator.calculate(
-            changedFiles = listOf("data/src/test/java/com/locationalarm/data/dao/LocationAlarmDaoTest.kt"),
+            changedFiles = listOf("data/src/test/java/com/example/data/dao/OrderDaoTest.kt"),
             moduleDirs = moduleDirs,
             reverseDependencies = reverseDependencies,
             ignoredPaths = defaultIgnoredPaths,
@@ -106,7 +106,7 @@ class AffectedModuleCalculatorTest {
     @Test
     fun `when only src androidTest in a module changes then only androidTest for that module is affected`() {
         val result = AffectedModuleCalculator.calculate(
-            changedFiles = listOf("app/src/androidTest/java/com/locationalarm/AppInstrumentedTest.kt"),
+            changedFiles = listOf("app/src/androidTest/java/com/example/app/AppNavigationTest.kt"),
             moduleDirs = moduleDirs,
             reverseDependencies = reverseDependencies,
             ignoredPaths = defaultIgnoredPaths,
@@ -122,14 +122,14 @@ class AffectedModuleCalculatorTest {
     @Test
     fun `when leaf feature src main changes then only that feature and app are affected across all task types`() {
         val result = AffectedModuleCalculator.calculate(
-            changedFiles = listOf("feature/settings/src/main/java/com/locationalarm/feature/settings/SettingsScreen.kt"),
+            changedFiles = listOf("feature/checkout/src/main/java/com/example/feature/checkout/CheckoutScreen.kt"),
             moduleDirs = moduleDirs,
             reverseDependencies = reverseDependencies,
             ignoredPaths = defaultIgnoredPaths,
             globalPaths = defaultGlobalPaths,
         )
 
-        val expected = setOf(":feature:settings", ":app")
+        val expected = setOf(":feature:checkout", ":app")
         assertEquals(expected, result.affectedTestModules)
         assertEquals(expected, result.affectedAndroidTestModules)
         assertEquals(expected, result.affectedScreenshotModules)
@@ -139,14 +139,14 @@ class AffectedModuleCalculatorTest {
     @Test
     fun `when domain src main changes then domain and all direct and transitive dependents are affected`() {
         val result = AffectedModuleCalculator.calculate(
-            changedFiles = listOf("domain/src/main/java/com/locationalarm/domain/model/LocationAlarm.kt"),
+            changedFiles = listOf("domain/src/main/java/com/example/domain/model/Order.kt"),
             moduleDirs = moduleDirs,
             reverseDependencies = reverseDependencies,
             ignoredPaths = defaultIgnoredPaths,
             globalPaths = defaultGlobalPaths,
         )
 
-        val expected = setOf(":domain", ":data", ":feature:alarms", ":feature:settings", ":app")
+        val expected = setOf(":domain", ":data", ":feature:catalog", ":feature:checkout", ":app")
         assertEquals(expected, result.affectedTestModules)
         assertEquals(expected, result.affectedAndroidTestModules)
         assertEquals(expected, result.affectedScreenshotModules)
@@ -156,7 +156,7 @@ class AffectedModuleCalculatorTest {
     @Test
     fun `when nested module file changes it matches longest module directory prefix`() {
         val result = AffectedModuleCalculator.calculate(
-            changedFiles = listOf("core/domain/src/test/java/com/locationalarm/core/domain/UseCaseTest.kt"),
+            changedFiles = listOf("core/domain/src/test/java/com/example/core/domain/UseCaseTest.kt"),
             moduleDirs = moduleDirs,
             reverseDependencies = reverseDependencies,
             ignoredPaths = defaultIgnoredPaths,

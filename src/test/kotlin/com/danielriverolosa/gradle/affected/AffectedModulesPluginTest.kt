@@ -87,7 +87,7 @@ class AffectedModulesPluginTest {
             .withPluginClasspath()
             .withArguments(
                 "printAffectedTestTasks",
-                "-PchangedFiles=docs/ROADMAP.md,README.md",
+                "-PchangedFiles=docs/ARCHITECTURE.md,README.md",
                 "-q",
             )
             .build()
