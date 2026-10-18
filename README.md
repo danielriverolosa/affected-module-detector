@@ -2,10 +2,14 @@
 
 [![Gradle 9.7+](https://img.shields.io/badge/Gradle-9.7%2B-02303A?logo=gradle)](https://gradle.org)
 [![Kotlin 2.4+](https://img.shields.io/badge/Kotlin-2.4%2B-7F52FF?logo=kotlin)](https://kotlinlang.org)
-[![Configuration Cache](https://img.shields.io/badge/Configuration%20Cache-Compatible-brightgreen)](#cache-safety-architecture)
-[![Build Cache](https://img.shields.io/badge/Build%20Cache-Compatible-brightgreen)](#cache-safety-architecture)
+[![Configuration Cache](https://img.shields.io/badge/Configuration%20Cache-Compatible-brightgreen)](#why-this-plugin-exists)
+[![Build Cache](https://img.shields.io/badge/Build%20Cache-Compatible-brightgreen)](#why-this-plugin-exists)
 
-A lightweight, zero-dependency Gradle 9+ plugin that computes the exact subset of module test and lint tasks affected by a Git change set—including transitive dependents across the project dependency graph—without breaking the **Gradle Configuration Cache** or **Gradle Build Cache**.
+A lightweight, zero-dependency Gradle 9+ plugin that computes the exact subset of module **unit test**, **Roborazzi screenshot**, **instrumented `androidTest`**, and **Android/JVM Lint** tasks affected by a Git change set—including transitive dependents across the project dependency graph—without breaking the **Gradle Configuration Cache** or **Gradle Build Cache**.
+
+<p align="center">
+  <img src="docs/assets/pipeline-overview.svg" alt="Affected Module Detector — Gradle 9 Task Selection Pipeline" width="100%"/>
+</p>
 
 ---
 
@@ -20,29 +24,29 @@ Legacy plugins such as Dropbox's `AffectedModuleDetector` (archived in 2023) rel
 `com.danielriverolosa.affected-modules` solves this by acting as a **decoupled task selector**:
 - It extracts the multi-module reverse dependency DAG into serializable `@Input` maps during configuration.
 - It reads `git diff` lazily via Gradle's Configuration-Cache-safe `ValueSource` API (`GitChangedFilesValueSource`).
-- It outputs the exact list of unmodified native Gradle tasks (`:module:testDebugUnitTest`, `:module:test`, `:module:lintRelease`) so CI invokes standard tasks with 100% intact Build Cache and Configuration Cache semantics.
+- It outputs the exact list of unmodified native Gradle tasks (`:module:testDebugUnitTest`, `:module:verifyRoborazziDebug`, `:module:connectedDebugAndroidTest`, `:module:lintRelease`) so CI invokes standard tasks with 100% intact Build Cache and Configuration Cache semantics.
+
+<p align="center">
+  <img src="docs/assets/cache-architecture.svg" alt="Legacy Detector vs Gradle 9 Cache-Safe Architecture" width="100%"/>
+</p>
 
 ---
 
-## How It Works
+## How Graph Propagation Works
 
-```mermaid
-flowchart LR
-    GitDiff["GitChangedFilesValueSource\n(git diff baseRef...HEAD)"] --> Calc["AffectedModuleCalculator\n(Pure Kotlin Seam)"]
-    DAG["Reverse Dependency DAG\nMap&lt;Module, Set&lt;Dependent&gt;&gt;"] --> Calc
-    Rules["Classification Rules\n(Ignored / Global / Test-Only / Main)"] --> Calc
-    Calc --> TestTasks["printAffectedTestTasks\n(:domain:test :app:testDebugUnitTest)"]
-    Calc --> LintTasks["printAffectedLintTasks\n(:domain:lintRelease :app:lintRelease)"]
-```
+<p align="center">
+  <img src="docs/assets/dag-propagation.svg" alt="Reverse Dependency DAG Propagation Scenarios" width="100%"/>
+</p>
 
-### Change Classification Rules
+### Change Classification Matrix
 
 | Change Type | Example Path | Propagation Behavior | Tasks Emitted |
 | :--- | :--- | :--- | :--- |
 | **Ignored Paths** | `docs/ROADMAP.md`, `README.md`, `.gitignore` | Ignored | None (`""` — CI skips execution) |
-| **Global Build Paths** | `build-logic/**`, `gradle/libs.versions.toml`, `build.gradle.kts`, `settings.gradle.kts` | All modules in repository | Test & Lint tasks for **all** modules |
-| **Test-Only Changes** | `feature/alarms/src/test/**`, `app/src/androidTest/**` | **No propagation** (production ABI unchanged) | Test task for the modified module only; **0** lint tasks |
-| **Production Changes** | `domain/src/main/**`, `domain/build.gradle.kts` | **Transitive BFS** up the reverse dependency DAG | Test & Lint tasks for the module + all direct and transitive dependents |
+| **Global Build Paths** | `build-logic/**`, `gradle/libs.versions.toml`, `build.gradle.kts`, `settings.gradle.kts` | All modules in repository | Unit Test, Screenshot, `androidTest` & Lint tasks for **all** applicable modules |
+| **Unit Test-Only Changes** | `feature/alarms/src/test/**` | **No propagation** (production ABI unchanged) | Unit & Screenshot tasks for the modified module only; **0** `androidTest` or Lint tasks |
+| **Instrumented Test-Only Changes** | `app/src/androidTest/**` | **No propagation** (production ABI unchanged) | `androidTest` task for the modified module only; **0** unit test, screenshot, or Lint tasks |
+| **Production Changes** | `domain/src/main/**`, `domain/build.gradle.kts` | **Transitive BFS** up the reverse dependency DAG | Unit Test, Screenshot, `androidTest` & Lint tasks for the module + all direct and transitive dependents |
 
 ---
 
@@ -62,11 +66,12 @@ pluginManagement {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/danielriverolosa/affected-module-detector")
             credentials {
-                username = providers.gradleProperty("gpr.user")
-                    .orElse(providers.environmentVariable("GITHUB_ACTOR"))
+                username = providers.gradleProperty("gpr.user").filter { it.isNotBlank() }
+                    .orElse(providers.environmentVariable("GITHUB_ACTOR").filter { it.isNotBlank() })
                     .orNull
-                password = providers.gradleProperty("gpr.key")
-                    .orElse(providers.environmentVariable("GITHUB_TOKEN"))
+                password = providers.gradleProperty("gpr.key").filter { it.isNotBlank() }
+                    .orElse(providers.environmentVariable("PACKAGES_TOKEN").filter { it.isNotBlank() })
+                    .orElse(providers.environmentVariable("GITHUB_TOKEN").filter { it.isNotBlank() })
                     .orNull
             }
         }
@@ -77,14 +82,14 @@ pluginManagement {
 > [!IMPORTANT]
 > **Authentication Requirements:**
 > GitHub Packages Maven requires a token with `read:packages` scope for downloading artifacts:
-> - **Local development:** Set `gpr.user=<github-username>` and `gpr.key=<token-with-read:packages>` in `~/.gradle/gradle.properties`, or export `GITHUB_TOKEN`.
-> - **GitHub Actions CI:** Grant the consumer repository read access under **Package Settings → Manage Actions access** on GitHub (or provide a `PACKAGES_TOKEN` with `read:packages`).
+> - **Local development:** Set `gpr.user=<github-username>` and `gpr.key=<token-with-read:packages>` in `~/.gradle/gradle.properties`.
+> - **GitHub Actions CI:** Provide `PACKAGES_TOKEN` (a token with `read:packages`) in repository secrets.
 
 ### 2. Register in `gradle/libs.versions.toml`
 
 ```toml
 [versions]
-affectedModules = "0.1.0"
+affectedModules = "0.2.0"
 
 [plugins]
 affected-modules = { id = "com.danielriverolosa.affected-modules", version.ref = "affectedModules" }
@@ -99,24 +104,6 @@ plugins {
 
 affectedModules {
     baseRef.set("origin/master")
-    ignoredPaths.set(
-        listOf(
-            "docs/",
-            ".md",
-            ".gitignore",
-            ".github/",
-        )
-    )
-    globalPaths.set(
-        listOf(
-            "build-logic/",
-            "gradle/libs.versions.toml",
-            "gradle/wrapper/",
-            "build.gradle.kts",
-            "settings.gradle.kts",
-            "gradle.properties",
-        )
-    )
 }
 ```
 
@@ -126,7 +113,7 @@ affectedModules {
 
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `baseRef` | `Property<String>` | `"origin/master"` | Git reference used as the base for `git diff --name-only <baseRef>...HEAD`. Can be overridden via `-PbaseRef=<ref>`. |
+| `baseRef` | `Property<String>` | `"origin/master"` | Git reference used as the base for `git diff --name-only <baseRef>...HEAD`. Overridable via `-PbaseRef=<ref>`. |
 | `ignoredPaths` | `ListProperty<String>` | `["docs/", ".md", ".gitignore", ".github/"]` | Directory prefixes (ending with `/`), file extensions (starting with `.`), or exact paths that do not trigger any module tasks. |
 | `globalPaths` | `ListProperty<String>` | `["build-logic/", "gradle/libs.versions.toml", "gradle/wrapper/", "build.gradle.kts", "settings.gradle.kts", "gradle.properties"]` | Root files or directory prefixes whose modification marks all project modules as affected. |
 | `androidUnitTestTaskName` | `Property<String>` | `"testDebugUnitTest"` | Unit test task name emitted for modules with `com.android.application`, `com.android.library`, or `com.android.test`. |
@@ -168,14 +155,14 @@ Ensure `actions/checkout` fetches git history (`fetch-depth: 0`) so `origin/mast
 
 ```yaml
 - name: Checkout
-  uses: actions/checkout@v4
+  uses: actions/checkout@v7
   with:
     fetch-depth: 0
 
-- name: Run Affected Unit Tests
+- name: Run Affected Unit & Roborazzi Tests
   env:
     GITHUB_ACTOR: ${{ github.actor }}
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
   run: |
     AFFECTED_TASKS=$(./gradlew -q printAffectedTestTasks -PbaseRef=origin/master)
     if [ -z "$AFFECTED_TASKS" ]; then

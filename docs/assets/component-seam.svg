@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgSeam" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="seamCore" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <filter id="drop" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <marker id="arrIndigo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#818CF8"/>
+    </marker>
+    <marker id="arrEmerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34D399"/>
+    </marker>
+  </defs>
+
+  <rect width="1080" height="420" rx="20" fill="url(#bgSeam)" stroke="#1E293B" stroke-width="2"/>
+
+  <!-- Outer Boundary: Gradle 9 Adapter Layer -->
+  <rect x="32" y="28" width="620" height="364" rx="16" fill="#0F172A" stroke="#4F46E5" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="52" y="54" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2" fill="#818CF8">
+    GRADLE 9 RUNTIME ADAPTER LAYER (org.gradle.api.*)
+  </text>
+
+  <!-- Outer Boundary: Pure Kotlin Seam -->
+  <rect x="684" y="28" width="364" height="364" rx="16" fill="#091917" stroke="#10B981" stroke-width="2"/>
+  <text x="704" y="54" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2" fill="#34D399">
+    PURE KOTLIN CORE SEAM (ZERO GRADLE IMPORTS)
+  </text>
+
+  <!-- AffectedModulesPlugin -->
+  <g filter="url(#drop)">
+    <rect x="56" y="76" width="256" height="128" rx="12" fill="#1E293B" stroke="#6366F1" stroke-width="1.5"/>
+    <text x="74" y="102" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#C7D2FE">AffectedModulesPlugin</text>
+    <line x1="56" y1="114" x2="312" y2="114" stroke="#334155" stroke-width="1"/>
+    <text x="74" y="136" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Extracts reverse dependency DAG</text>
+    <text x="74" y="156" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Detects Android / JVM / Roborazzi</text>
+    <text x="74" y="176" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Registers 4 root selector tasks</text>
+  </g>
+
+  <!-- AffectedModulesExtension -->
+  <g filter="url(#drop)">
+    <rect x="56" y="236" width="256" height="128" rx="12" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5"/>
+    <text x="74" y="262" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#FDE68A">AffectedModulesExtension</text>
+    <line x1="56" y1="274" x2="312" y2="274" stroke="#334155" stroke-width="1"/>
+    <text x="74" y="296" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">baseRef: Property&lt;String&gt;</text>
+    <text x="74" y="314" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">ignoredPaths: ListProperty&lt;String&gt;</text>
+    <text x="74" y="332" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">globalPaths: ListProperty&lt;String&gt;</text>
+    <text x="74" y="350" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">*TaskName: Property&lt;String&gt;</text>
+  </g>
+
+  <!-- GitChangedFilesValueSource -->
+  <g filter="url(#drop)">
+    <rect x="368" y="76" width="260" height="110" rx="12" fill="#1E293B" stroke="#06B6D4" stroke-width="1.5"/>
+    <text x="386" y="102" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#67E8F9">GitChangedFilesValueSource</text>
+    <line x1="368" y1="114" x2="628" y2="114" stroke="#334155" stroke-width="1"/>
+    <text x="386" y="136" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Injected ExecOperations</text>
+    <text x="386" y="156" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Runs git diff baseRef...HEAD</text>
+    <text x="386" y="174" font-family="system-ui, sans-serif" font-size="11.5" fill="#F87171">• Fails fast if baseRef unfetched</text>
+  </g>
+
+  <!-- PrintAffectedTasksTask -->
+  <g filter="url(#drop)">
+    <rect x="368" y="218" width="260" height="146" rx="12" fill="#1E293B" stroke="#8B5CF6" stroke-width="1.5"/>
+    <text x="386" y="244" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#DDD6FE">PrintAffectedTasksTask</text>
+    <line x1="368" y1="256" x2="628" y2="256" stroke="#334155" stroke-width="1"/>
+    <text x="386" y="278" font-family="ui-monospace, monospace" font-size="11" fill="#A78BFA">@DisableCachingByDefault</text>
+    <text x="386" y="298" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">@Input changedFiles</text>
+    <text x="386" y="316" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">@Input moduleDirs / reverseDeps</text>
+    <text x="386" y="334" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">@Input moduleTaskMap / taskMode</text>
+    <text x="386" y="352" font-family="system-ui, sans-serif" font-size="11" fill="#94A3B8">Zero Task.project references</text>
+  </g>
+
+  <!-- Pure Core Box: AffectedModuleCalculator -->
+  <g filter="url(#drop)">
+    <rect x="708" y="76" width="316" height="184" rx="14" fill="url(#seamCore)" stroke="#34D399" stroke-width="2"/>
+    <text x="866" y="104" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="700" fill="#FFFFFF">
+      AffectedModuleCalculator
+    </text>
+    <line x1="708" y1="118" x2="1024" y2="118" stroke="#10B981" stroke-width="1"/>
+    <text x="728" y="142" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• Longest-prefix nested module match</text>
+    <text x="728" y="164" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• Separates src/test vs src/androidTest</text>
+    <text x="728" y="186" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• Transitive BFS on reverseDependencies</text>
+    <text x="728" y="208" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• 100% pure JVM unit-tested in &lt;50ms</text>
+    <rect x="728" y="222" width="276" height="24" rx="6" fill="#022C22"/>
+    <text x="866" y="238" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#6EE7B7">
+      calculate(...) : AffectedAnalysisResult
+    </text>
+  </g>
+
+  <!-- AffectedAnalysisResult -->
+  <g filter="url(#drop)">
+    <rect x="708" y="280" width="316" height="92" rx="12" fill="#1E293B" stroke="#10B981" stroke-width="1.5"/>
+    <text x="866" y="304" text-anchor="middle" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#6EE7B7">
+      AffectedAnalysisResult
+    </text>
+    <text x="728" y="326" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">• affectedTestModules / ScreenshotModules</text>
+    <text x="728" y="344" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">• affectedAndroidTestModules</text>
+    <text x="728" y="362" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">• affectedLintModules</text>
+  </g>
+
+  <!-- Internal & Cross-Boundary Arrows -->
+  <line x1="312" y1="130" x2="364" y2="130" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
+  <line x1="312" y1="168" x2="364" y2="260" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
+  <line x1="184" y1="204" x2="184" y2="232" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
+  <line x1="498" y1="186" x2="498" y2="214" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
+  <line x1="628" y1="290" x2="704" y2="180" stroke="#34D399" stroke-width="2.5" marker-end="url(#arrEmerald)"/>
+  <line x1="866" y1="260" x2="866" y2="276" stroke="#34D399" stroke-width="2" marker-end="url(#arrEmerald)"/>
+</svg>

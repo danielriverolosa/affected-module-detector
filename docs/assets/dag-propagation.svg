@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="changedNode" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="propagatedNode" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="testOnlyNode" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#0891B2"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="activeArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#60A5FA"/>
+    </marker>
+    <marker id="dimArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect width="1080" height="480" rx="20" fill="url(#bg)" stroke="#1E293B" stroke-width="2"/>
+  <line x1="540" y1="24" x2="540" y2="456" stroke="#1E293B" stroke-width="2" stroke-dasharray="6 6"/>
+
+  <!-- ================= LEFT PANEL: SCENARIO A ================= -->
+  <text x="36" y="42" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#F8FAFC">
+    Scenario A: Production Change in :feature:settings
+  </text>
+  <text x="36" y="64" font-family="ui-monospace, monospace" font-size="12" fill="#FBBF24">
+    Changed: feature/settings/src/main/.../SettingsScreen.kt
+  </text>
+  <rect x="410" y="24" width="106" height="28" rx="14" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+  <text x="463" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#6EE7B7">
+    2 / 9 Modules
+  </text>
+
+  <!-- Edges Left Panel -->
+  <line x1="270" y1="158" x2="130" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+  <line x1="270" y1="158" x2="270" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+  <line x1="410" y1="158" x2="410" y2="230" stroke="#60A5FA" stroke-width="3" marker-end="url(#activeArrow)"/>
+  <line x1="130" y1="286" x2="195" y2="355" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+  <line x1="270" y1="286" x2="270" y2="355" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+  <line x1="410" y1="286" x2="345" y2="355" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+
+  <!-- Top Node: :app (Propagated) -->
+  <g filter="url(#cardShadow)">
+    <rect x="200" y="102" width="140" height="56" rx="12" fill="url(#propagatedNode)" stroke="#93C5FD" stroke-width="2"/>
+    <text x="270" y="127" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="700" fill="#FFFFFF">:app</text>
+    <text x="270" y="146" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#DBEAFE">DEPENDENT • RUNS</text>
+  </g>
+
+  <!-- Middle Nodes: :feature:alarms (Skipped), :feature:favorites (Skipped), :feature:settings (Direct Changed) -->
+  <rect x="60" y="230" width="130" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="125" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:alarms</text>
+  <text x="125" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="205" y="230" width="130" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="270" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:home</text>
+  <text x="270" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="350" y="228" width="145" height="58" rx="12" fill="url(#changedNode)" stroke="#FDE68A" stroke-width="2"/>
+    <text x="422" y="253" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#FFFFFF">:feature:settings</text>
+    <text x="422" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#FEF3C7">MODIFIED • RUNS</text>
+  </g>
+
+  <!-- Bottom Nodes: :data, :domain, :core:ui (All Skipped) -->
+  <rect x="80" y="355" width="110" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="135" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:data</text>
+  <text x="135" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="215" y="355" width="110" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="270" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:domain</text>
+  <text x="270" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="350" y="355" width="110" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="405" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:core:ui</text>
+  <text x="405" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="36" y="424" width="480" height="34" rx="8" fill="#1E293B"/>
+  <text x="50" y="445" font-family="ui-monospace, monospace" font-size="11" fill="#93C5FD">
+    Output: :app:testDebugUnitTest :feature:settings:testDebugUnitTest
+  </text>
+
+  <!-- ================= RIGHT PANEL: SCENARIO B ================= -->
+  <text x="568" y="42" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#F8FAFC">
+    Scenario B: Test-Only Change in :data/src/test
+  </text>
+  <text x="568" y="64" font-family="ui-monospace, monospace" font-size="12" fill="#38BDF8">
+    Changed: data/src/test/.../LocationAlarmDaoTest.kt
+  </text>
+  <rect x="942" y="24" width="106" height="28" rx="14" fill="#0C4A6E" stroke="#38BDF8" stroke-width="1"/>
+  <text x="995" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#7DD3FC">
+    1 / 9 Modules
+  </text>
+
+  <!-- Edges Right Panel -->
+  <line x1="802" y1="158" x2="662" y2="230" stroke="#334155" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="802" y1="158" x2="802" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+  <line x1="802" y1="158" x2="942" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+
+  <!-- Propagation Stop Badge between :data and :app -->
+  <rect x="665" y="176" width="118" height="22" rx="6" fill="#31102F" stroke="#EC4899" stroke-width="1"/>
+  <text x="724" y="191" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#F9A8D4">
+    ✕ NO PROPAGATION
+  </text>
+
+  <!-- Top Node: :app (Skipped!) -->
+  <rect x="732" y="102" width="140" height="56" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="802" y="127" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" fill="#64748B">:app</text>
+  <text x="802" y="146" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED (ABI INTACT)</text>
+
+  <!-- Middle Nodes: :data (Active Test-Only), :feature:alarms, :feature:settings -->
+  <g filter="url(#cardShadow)">
+    <rect x="592" y="228" width="140" height="58" rx="12" fill="url(#testOnlyNode)" stroke="#A5F3FC" stroke-width="2"/>
+    <text x="662" y="253" text-anchor="middle" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#FFFFFF">:data</text>
+    <text x="662" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#ECFEFF">TEST ONLY • 0 LINT</text>
+  </g>
+
+  <rect x="742" y="230" width="125" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="804" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:alarms</text>
+  <text x="804" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="880" y="230" width="140" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="950" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:settings</text>
+  <text x="950" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <!-- Bottom Nodes Right Panel -->
+  <rect x="605" y="355" width="115" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="662" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:core:data</text>
+  <text x="662" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="745" y="355" width="115" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="802" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:domain</text>
+  <text x="802" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="885" y="355" width="115" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="942" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:core:ui</text>
+  <text x="942" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+
+  <rect x="568" y="424" width="480" height="34" rx="8" fill="#1E293B"/>
+  <text x="582" y="445" font-family="ui-monospace, monospace" font-size="11" fill="#67E8F9">
+    Output: :data:testDebugUnitTest   (Lint Output: "")
+  </text>
+</svg>

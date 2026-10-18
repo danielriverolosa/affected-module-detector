@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgCache" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <filter id="boxShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="redArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#F87171"/>
+    </marker>
+    <marker id="greenArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34D399"/>
+    </marker>
+  </defs>
+
+  <rect width="1080" height="360" rx="20" fill="url(#bgCache)" stroke="#1E293B" stroke-width="2"/>
+
+  <!-- Top Row: Legacy Detector (Red / Broken) -->
+  <g filter="url(#boxShadow)">
+    <rect x="32" y="28" width="1016" height="138" rx="14" fill="#1C1219" stroke="#991B1B" stroke-width="1.5"/>
+    <rect x="48" y="44" width="230" height="26" rx="6" fill="#7F1D1D"/>
+    <text x="163" y="61" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" font-weight="700" fill="#FECACA">
+      ✕ LEGACY DETECTOR (ARCHIVED)
+    </text>
+
+    <rect x="48" y="84" width="260" height="62" rx="10" fill="#0F172A" stroke="#7F1D1D" stroke-width="1"/>
+    <text x="178" y="110" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#FCA5A5">afterEvaluate { git diff }</text>
+    <text x="178" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94A3B8">Runs external process in config phase</text>
+
+    <line x1="308" y1="115" x2="368" y2="115" stroke="#F87171" stroke-width="2" marker-end="url(#redArr)"/>
+
+    <rect x="372" y="84" width="280" height="62" rx="10" fill="#0F172A" stroke="#7F1D1D" stroke-width="1"/>
+    <text x="512" y="110" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#FCA5A5">task.enabled = false</text>
+    <text x="512" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94A3B8">Mutates global AGP task graph per commit</text>
+
+    <line x1="652" y1="115" x2="712" y2="115" stroke="#F87171" stroke-width="2" marker-end="url(#redArr)"/>
+
+    <rect x="716" y="84" width="312" height="62" rx="10" fill="#450A0A" stroke="#EF4444" stroke-width="1.5"/>
+    <text x="872" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#FECACA">Configuration Cache Invalidated</text>
+    <text x="872" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#FCA5A5">Fails Gradle 9 Project Isolation</text>
+  </g>
+
+  <!-- Bottom Row: affected-module-detector (Green / Cache-Safe) -->
+  <g filter="url(#boxShadow)">
+    <rect x="32" y="192" width="1016" height="140" rx="14" fill="#0D1F1C" stroke="#059669" stroke-width="1.5"/>
+    <rect x="48" y="208" width="270" height="26" rx="6" fill="#064E3B"/>
+    <text x="183" y="225" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" font-weight="700" fill="#A7F3D0">
+      ✓ AFFECTED-MODULE-DETECTOR (GRADLE 9)
+    </text>
+
+    <rect x="48" y="248" width="260" height="64" rx="10" fill="#0F172A" stroke="#047857" stroke-width="1"/>
+    <text x="178" y="274" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#6EE7B7">ValueSource + MapProperty</text>
+    <text x="178" y="294" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94A3B8">Lazy git diff &amp; serializable DAG @Input</text>
+
+    <line x1="308" y1="280" x2="368" y2="280" stroke="#34D399" stroke-width="2" marker-end="url(#greenArr)"/>
+
+    <rect x="372" y="248" width="280" height="64" rx="10" fill="#0F172A" stroke="#047857" stroke-width="1"/>
+    <text x="512" y="274" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#6EE7B7">printAffected*Tasks (stdout)</text>
+    <text x="512" y="294" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94A3B8">Emits unmodified native task paths</text>
+
+    <line x1="652" y1="280" x2="712" y2="280" stroke="#34D399" stroke-width="2" marker-end="url(#greenArr)"/>
+
+    <rect x="716" y="248" width="312" height="64" rx="10" fill="#064E3B" stroke="#10B981" stroke-width="1.5"/>
+    <text x="872" y="274" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#D1FAE5">100% Cache Hit Rate Preserved</text>
+    <text x="872" y="294" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6EE7B7">Config Cache Reused + AGP FROM-CACHE</text>
+  </g>
+</svg>
