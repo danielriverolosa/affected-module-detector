@@ -1,153 +1,142 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 480" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" width="100%" height="100%">
+  <style>
+    .canvas { fill: #FAFAFA; stroke: #E4E4E7; stroke-width: 1; }
+    .divider { stroke: #D4D4D8; stroke-width: 1; stroke-dasharray: 4 4; }
+    .heading { font: 600 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #18181B; }
+    .sub { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #52525B; }
+    .node-skip { fill: #FFFFFF; stroke: #D4D4D8; stroke-width: 1; stroke-dasharray: 3 3; }
+    .node-active { fill: #EFF6FF; stroke: #2563EB; stroke-width: 1.5; }
+    .node-dep { fill: #FFFFFF; stroke: #18181B; stroke-width: 1.5; }
+    .label-skip { font: 500 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #A1A1AA; }
+    .label-active { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1D4ED8; }
+    .label-dep { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #18181B; }
+    .status-skip { font: 500 9px -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0.05em; fill: #A1A1AA; }
+    .status-active { font: 600 9px -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0.05em; fill: #1D4ED8; }
+    .status-dep { font: 600 9px -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: 0.05em; fill: #52525B; }
+    .edge-skip { stroke: #D4D4D8; stroke-width: 1; fill: none; }
+    .edge-active { stroke: #18181B; stroke-width: 1.5; fill: none; }
+    .arr-skip { fill: #D4D4D8; }
+    .arr-active { fill: #18181B; }
+    .footer { fill: #F4F4F5; stroke: #E4E4E7; stroke-width: 1; }
+    .block-pill { fill: #FEF2F2; stroke: #FECACA; stroke-width: 1; }
+    .block-text { font: 600 9px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #B91C1C; }
+    @media (prefers-color-scheme: dark) {
+      .canvas { fill: #0D1117; stroke: #30363D; }
+      .divider { stroke: #30363D; }
+      .heading { fill: #E6EDF3; }
+      .sub { fill: #8B949E; }
+      .node-skip { fill: #0D1117; stroke: #30363D; }
+      .node-active { fill: #121D2F; stroke: #388BFD; }
+      .node-dep { fill: #161B22; stroke: #E6EDF3; }
+      .label-skip { fill: #484F58; }
+      .label-active { fill: #58A6FF; }
+      .label-dep { fill: #E6EDF3; }
+      .status-skip { fill: #484F58; }
+      .status-active { fill: #58A6FF; }
+      .status-dep { fill: #8B949E; }
+      .edge-skip { stroke: #30363D; }
+      .edge-active { stroke: #E6EDF3; }
+      .arr-skip { fill: #30363D; }
+      .arr-active { fill: #E6EDF3; }
+      .footer { fill: #161B22; stroke: #30363D; }
+      .block-pill { fill: #2D1215; stroke: #F85149; }
+      .block-text { fill: #FF7B72; }
+    }
+  </style>
+
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0B0F19"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="changedNode" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F59E0B"/>
-      <stop offset="100%" stop-color="#D97706"/>
-    </linearGradient>
-    <linearGradient id="propagatedNode" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3B82F6"/>
-      <stop offset="100%" stop-color="#2563EB"/>
-    </linearGradient>
-    <linearGradient id="testOnlyNode" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#06B6D4"/>
-      <stop offset="100%" stop-color="#0891B2"/>
-    </linearGradient>
-    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
-    </filter>
-    <marker id="activeArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#60A5FA"/>
+    <marker id="aSkip" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 1 L 7 4 L 0 7 z" class="arr-skip"/>
     </marker>
-    <marker id="dimArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155"/>
+    <marker id="aAct" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 1 L 7 4 L 0 7 z" class="arr-active"/>
     </marker>
   </defs>
 
-  <rect width="1080" height="480" rx="20" fill="url(#bg)" stroke="#1E293B" stroke-width="2"/>
-  <line x1="540" y1="24" x2="540" y2="456" stroke="#1E293B" stroke-width="2" stroke-dasharray="6 6"/>
+  <rect width="960" height="390" rx="6" class="canvas"/>
+  <line x1="480" y1="20" x2="480" y2="370" class="divider"/>
 
-  <!-- ================= LEFT PANEL: SCENARIO A ================= -->
-  <text x="36" y="42" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#F8FAFC">
-    Scenario A: Production Change in :feature:settings
-  </text>
-  <text x="36" y="64" font-family="ui-monospace, monospace" font-size="12" fill="#FBBF24">
-    Changed: feature/settings/src/main/.../SettingsScreen.kt
-  </text>
-  <rect x="410" y="24" width="106" height="28" rx="14" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
-  <text x="463" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#6EE7B7">
-    2 / 9 Modules
-  </text>
+  <!-- ================= CASE A: PRODUCTION CHANGE ================= -->
+  <text x="28" y="38" class="heading">Case A — Production Source Change (src/main)</text>
+  <text x="28" y="56" class="sub">diff: feature/checkout/src/main/kotlin/CheckoutScreen.kt</text>
 
-  <!-- Edges Left Panel -->
-  <line x1="270" y1="158" x2="130" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
-  <line x1="270" y1="158" x2="270" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
-  <line x1="410" y1="158" x2="410" y2="230" stroke="#60A5FA" stroke-width="3" marker-end="url(#activeArrow)"/>
-  <line x1="130" y1="286" x2="195" y2="355" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
-  <line x1="270" y1="286" x2="270" y2="355" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
-  <line x1="410" y1="286" x2="345" y2="355" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+  <!-- Edges Case A -->
+  <line x1="240" y1="132" x2="105" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="240" y1="132" x2="240" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="240" y1="132" x2="375" y2="196" class="edge-active" marker-end="url(#aAct)"/>
+  <line x1="105" y1="244" x2="170" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="240" y1="244" x2="240" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="375" y1="244" x2="310" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
 
-  <!-- Top Node: :app (Propagated) -->
-  <g filter="url(#cardShadow)">
-    <rect x="200" y="102" width="140" height="56" rx="12" fill="url(#propagatedNode)" stroke="#93C5FD" stroke-width="2"/>
-    <text x="270" y="127" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="700" fill="#FFFFFF">:app</text>
-    <text x="270" y="146" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#DBEAFE">DEPENDENT • RUNS</text>
-  </g>
+  <!-- Nodes Case A -->
+  <rect x="180" y="84" width="120" height="48" rx="4" class="node-dep"/>
+  <text x="240" y="105" text-anchor="middle" class="label-dep">:app</text>
+  <text x="240" y="121" text-anchor="middle" class="status-dep">DEPENDENT (RUNS)</text>
 
-  <!-- Middle Nodes: :feature:alarms (Skipped), :feature:favorites (Skipped), :feature:settings (Direct Changed) -->
-  <rect x="60" y="230" width="130" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="125" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:alarms</text>
-  <text x="125" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="45" y="196" width="120" height="48" rx="4" class="node-skip"/>
+  <text x="105" y="217" text-anchor="middle" class="label-skip">:feature:catalog</text>
+  <text x="105" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <rect x="205" y="230" width="130" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="270" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:home</text>
-  <text x="270" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="180" y="196" width="120" height="48" rx="4" class="node-skip"/>
+  <text x="240" y="217" text-anchor="middle" class="label-skip">:feature:home</text>
+  <text x="240" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <g filter="url(#cardShadow)">
-    <rect x="350" y="228" width="145" height="58" rx="12" fill="url(#changedNode)" stroke="#FDE68A" stroke-width="2"/>
-    <text x="422" y="253" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#FFFFFF">:feature:settings</text>
-    <text x="422" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#FEF3C7">MODIFIED • RUNS</text>
-  </g>
+  <rect x="315" y="196" width="125" height="48" rx="4" class="node-active"/>
+  <text x="377" y="217" text-anchor="middle" class="label-active">:feature:checkout</text>
+  <text x="377" y="233" text-anchor="middle" class="status-active">MODIFIED (RUNS)</text>
 
-  <!-- Bottom Nodes: :data, :domain, :core:ui (All Skipped) -->
-  <rect x="80" y="355" width="110" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="135" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:data</text>
-  <text x="135" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="115" y="296" width="110" height="42" rx="4" class="node-skip"/>
+  <text x="170" y="315" text-anchor="middle" class="label-skip">:domain</text>
+  <text x="170" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <rect x="215" y="355" width="110" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="270" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:domain</text>
-  <text x="270" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="255" y="296" width="110" height="42" rx="4" class="node-skip"/>
+  <text x="310" y="315" text-anchor="middle" class="label-skip">:core:ui</text>
+  <text x="310" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <rect x="350" y="355" width="110" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="405" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:core:ui</text>
-  <text x="405" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="28" y="350" width="424" height="24" rx="3" class="footer"/>
+  <text x="38" y="366" class="sub">Tasks: :app:testDebugUnitTest :feature:checkout:testDebugUnitTest</text>
 
-  <rect x="36" y="424" width="480" height="34" rx="8" fill="#1E293B"/>
-  <text x="50" y="445" font-family="ui-monospace, monospace" font-size="11" fill="#93C5FD">
-    Output: :app:testDebugUnitTest :feature:settings:testDebugUnitTest
-  </text>
+  <!-- ================= CASE B: TEST-ONLY CHANGE ================= -->
+  <text x="508" y="38" class="heading">Case B — Unit Test Change Only (src/test)</text>
+  <text x="508" y="56" class="sub">diff: data/src/test/kotlin/OrderRepositoryTest.kt</text>
 
-  <!-- ================= RIGHT PANEL: SCENARIO B ================= -->
-  <text x="568" y="42" font-family="system-ui, sans-serif" font-size="17" font-weight="700" fill="#F8FAFC">
-    Scenario B: Test-Only Change in :data/src/test
-  </text>
-  <text x="568" y="64" font-family="ui-monospace, monospace" font-size="12" fill="#38BDF8">
-    Changed: data/src/test/.../LocationAlarmDaoTest.kt
-  </text>
-  <rect x="942" y="24" width="106" height="28" rx="14" fill="#0C4A6E" stroke="#38BDF8" stroke-width="1"/>
-  <text x="995" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#7DD3FC">
-    1 / 9 Modules
-  </text>
+  <!-- Edges Case B -->
+  <line x1="720" y1="132" x2="585" y2="196" class="edge-skip" stroke-dasharray="3 3"/>
+  <line x1="720" y1="132" x2="720" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="720" y1="132" x2="855" y2="196" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="585" y1="244" x2="650" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="720" y1="244" x2="720" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
+  <line x1="855" y1="244" x2="790" y2="296" class="edge-skip" marker-end="url(#aSkip)"/>
 
-  <!-- Edges Right Panel -->
-  <line x1="802" y1="158" x2="662" y2="230" stroke="#334155" stroke-width="1.5" stroke-dasharray="4 4"/>
-  <line x1="802" y1="158" x2="802" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
-  <line x1="802" y1="158" x2="942" y2="230" stroke="#334155" stroke-width="1.5" marker-end="url(#dimArrow)"/>
+  <!-- Stop propagation badge -->
+  <rect x="595" y="152" width="104" height="18" rx="3" class="block-pill"/>
+  <text x="647" y="164" text-anchor="middle" class="block-text">NO PROPAGATION</text>
 
-  <!-- Propagation Stop Badge between :data and :app -->
-  <rect x="665" y="176" width="118" height="22" rx="6" fill="#31102F" stroke="#EC4899" stroke-width="1"/>
-  <text x="724" y="191" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#F9A8D4">
-    ✕ NO PROPAGATION
-  </text>
+  <!-- Nodes Case B -->
+  <rect x="660" y="84" width="120" height="48" rx="4" class="node-skip"/>
+  <text x="720" y="105" text-anchor="middle" class="label-skip">:app</text>
+  <text x="720" y="121" text-anchor="middle" class="status-skip">SKIPPED (ABI INTACT)</text>
 
-  <!-- Top Node: :app (Skipped!) -->
-  <rect x="732" y="102" width="140" height="56" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="802" y="127" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" fill="#64748B">:app</text>
-  <text x="802" y="146" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED (ABI INTACT)</text>
+  <rect x="525" y="196" width="120" height="48" rx="4" class="node-active"/>
+  <text x="585" y="217" text-anchor="middle" class="label-active">:data</text>
+  <text x="585" y="233" text-anchor="middle" class="status-active">TEST ONLY (0 LINT)</text>
 
-  <!-- Middle Nodes: :data (Active Test-Only), :feature:alarms, :feature:settings -->
-  <g filter="url(#cardShadow)">
-    <rect x="592" y="228" width="140" height="58" rx="12" fill="url(#testOnlyNode)" stroke="#A5F3FC" stroke-width="2"/>
-    <text x="662" y="253" text-anchor="middle" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#FFFFFF">:data</text>
-    <text x="662" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#ECFEFF">TEST ONLY • 0 LINT</text>
-  </g>
+  <rect x="660" y="196" width="120" height="48" rx="4" class="node-skip"/>
+  <text x="720" y="217" text-anchor="middle" class="label-skip">:feature:catalog</text>
+  <text x="720" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <rect x="742" y="230" width="125" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="804" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:alarms</text>
-  <text x="804" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="795" y="196" width="125" height="48" rx="4" class="node-skip"/>
+  <text x="857" y="217" text-anchor="middle" class="label-skip">:feature:checkout</text>
+  <text x="857" y="233" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <rect x="880" y="230" width="140" height="54" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="950" y="254" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:feature:settings</text>
-  <text x="950" y="272" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="595" y="296" width="110" height="42" rx="4" class="node-skip"/>
+  <text x="650" y="315" text-anchor="middle" class="label-skip">:core:data</text>
+  <text x="650" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <!-- Bottom Nodes Right Panel -->
-  <rect x="605" y="355" width="115" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="662" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:core:data</text>
-  <text x="662" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
+  <rect x="735" y="296" width="110" height="42" rx="4" class="node-skip"/>
+  <text x="790" y="315" text-anchor="middle" class="label-skip">:domain</text>
+  <text x="790" y="329" text-anchor="middle" class="status-skip">SKIPPED</text>
 
-  <rect x="745" y="355" width="115" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="802" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:domain</text>
-  <text x="802" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
-
-  <rect x="885" y="355" width="115" height="50" rx="10" fill="#0F172A" stroke="#334155" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="942" y="378" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#64748B">:core:ui</text>
-  <text x="942" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#475569">SKIPPED</text>
-
-  <rect x="568" y="424" width="480" height="34" rx="8" fill="#1E293B"/>
-  <text x="582" y="445" font-family="ui-monospace, monospace" font-size="11" fill="#67E8F9">
-    Output: :data:testDebugUnitTest   (Lint Output: "")
-  </text>
+  <rect x="508" y="350" width="424" height="24" rx="3" class="footer"/>
+  <text x="518" y="366" class="sub">Tasks: :data:testDebugUnitTest   (Lint Tasks: none)</text>
 </svg>

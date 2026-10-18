@@ -1,114 +1,91 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 420" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="100%" height="100%">
+  <style>
+    .canvas { fill: #FAFAFA; stroke: #E4E4E7; stroke-width: 1; }
+    .zone-gradle { fill: #FFFFFF; stroke: #D4D4D8; stroke-width: 1; stroke-dasharray: 4 4; }
+    .zone-pure { fill: #FFFFFF; stroke: #18181B; stroke-width: 1.5; }
+    .card { fill: #F4F4F5; stroke: #D4D4D8; stroke-width: 1; }
+    .card-seam { fill: #EFF6FF; stroke: #2563EB; stroke-width: 1.2; }
+    .zone-title { font: 600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0.08em; fill: #71717A; }
+    .code { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #18181B; }
+    .code-seam { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1D4ED8; }
+    .meta { font: 400 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #52525B; }
+    .edge { stroke: #71717A; stroke-width: 1.2; fill: none; }
+    .arr { fill: #71717A; }
+    @media (prefers-color-scheme: dark) {
+      .canvas { fill: #0D1117; stroke: #30363D; }
+      .zone-gradle { fill: #0D1117; stroke: #30363D; }
+      .zone-pure { fill: #161B22; stroke: #8B949E; }
+      .card { fill: #161B22; stroke: #30363D; }
+      .card-seam { fill: #121D2F; stroke: #388BFD; }
+      .zone-title { fill: #8B949E; }
+      .code { fill: #E6EDF3; }
+      .code-seam { fill: #58A6FF; }
+      .meta { fill: #8B949E; }
+      .edge { stroke: #8B949E; }
+      .arr { fill: #8B949E; }
+    }
+  </style>
+
   <defs>
-    <linearGradient id="bgSeam" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0B0F19"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="seamCore" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#064E3B"/>
-      <stop offset="100%" stop-color="#047857"/>
-    </linearGradient>
-    <filter id="drop" x="-10%" y="-10%" width="120%" height="125%">
-      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.45"/>
-    </filter>
-    <marker id="arrIndigo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#818CF8"/>
-    </marker>
-    <marker id="arrEmerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34D399"/>
+    <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 1 L 7 4 L 0 7 z" class="arr"/>
     </marker>
   </defs>
 
-  <rect width="1080" height="420" rx="20" fill="url(#bgSeam)" stroke="#1E293B" stroke-width="2"/>
+  <rect width="960" height="340" rx="6" class="canvas"/>
 
-  <!-- Outer Boundary: Gradle 9 Adapter Layer -->
-  <rect x="32" y="28" width="620" height="364" rx="16" fill="#0F172A" stroke="#4F46E5" stroke-width="1.5" stroke-dasharray="6 4"/>
-  <text x="52" y="54" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2" fill="#818CF8">
-    GRADLE 9 RUNTIME ADAPTER LAYER (org.gradle.api.*)
-  </text>
+  <!-- Left Zone: Gradle Adapter -->
+  <rect x="24" y="20" width="564" height="300" rx="4" class="zone-gradle"/>
+  <text x="40" y="42" class="zone-title">GRADLE 9 ADAPTER LAYER (org.gradle.api.*)</text>
 
-  <!-- Outer Boundary: Pure Kotlin Seam -->
-  <rect x="684" y="28" width="364" height="364" rx="16" fill="#091917" stroke="#10B981" stroke-width="2"/>
-  <text x="704" y="54" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2" fill="#34D399">
-    PURE KOTLIN CORE SEAM (ZERO GRADLE IMPORTS)
-  </text>
+  <!-- Right Zone: Pure Kotlin Seam -->
+  <rect x="612" y="20" width="324" height="300" rx="4" class="zone-pure"/>
+  <text x="628" y="42" class="zone-title">PURE KOTLIN CORE SEAM (ZERO GRADLE IMPORTS)</text>
 
-  <!-- AffectedModulesPlugin -->
-  <g filter="url(#drop)">
-    <rect x="56" y="76" width="256" height="128" rx="12" fill="#1E293B" stroke="#6366F1" stroke-width="1.5"/>
-    <text x="74" y="102" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#C7D2FE">AffectedModulesPlugin</text>
-    <line x1="56" y1="114" x2="312" y2="114" stroke="#334155" stroke-width="1"/>
-    <text x="74" y="136" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Extracts reverse dependency DAG</text>
-    <text x="74" y="156" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Detects Android / JVM / Roborazzi</text>
-    <text x="74" y="176" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Registers 4 root selector tasks</text>
-  </g>
+  <!-- Cards inside Gradle Adapter -->
+  <rect x="40" y="60" width="240" height="106" rx="4" class="card"/>
+  <text x="54" y="82" class="code">AffectedModulesPlugin</text>
+  <text x="54" y="102" class="meta">• Extracts reverse dependency DAG</text>
+  <text x="54" y="120" class="meta">• Detects Android / JVM / Roborazzi</text>
+  <text x="54" y="138" class="meta">• Registers 4 root selector tasks</text>
 
-  <!-- AffectedModulesExtension -->
-  <g filter="url(#drop)">
-    <rect x="56" y="236" width="256" height="128" rx="12" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5"/>
-    <text x="74" y="262" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#FDE68A">AffectedModulesExtension</text>
-    <line x1="56" y1="274" x2="312" y2="274" stroke="#334155" stroke-width="1"/>
-    <text x="74" y="296" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">baseRef: Property&lt;String&gt;</text>
-    <text x="74" y="314" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">ignoredPaths: ListProperty&lt;String&gt;</text>
-    <text x="74" y="332" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">globalPaths: ListProperty&lt;String&gt;</text>
-    <text x="74" y="350" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">*TaskName: Property&lt;String&gt;</text>
-  </g>
+  <rect x="40" y="190" width="240" height="106" rx="4" class="card"/>
+  <text x="54" y="212" class="code">AffectedModulesExtension</text>
+  <text x="54" y="232" class="meta">• baseRef: Property&lt;String&gt;</text>
+  <text x="54" y="250" class="meta">• ignoredPaths / globalPaths</text>
+  <text x="54" y="268" class="meta">• Task &amp; plugin ID conventions</text>
 
-  <!-- GitChangedFilesValueSource -->
-  <g filter="url(#drop)">
-    <rect x="368" y="76" width="260" height="110" rx="12" fill="#1E293B" stroke="#06B6D4" stroke-width="1.5"/>
-    <text x="386" y="102" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#67E8F9">GitChangedFilesValueSource</text>
-    <line x1="368" y1="114" x2="628" y2="114" stroke="#334155" stroke-width="1"/>
-    <text x="386" y="136" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Injected ExecOperations</text>
-    <text x="386" y="156" font-family="system-ui, sans-serif" font-size="11.5" fill="#CBD5E1">• Runs git diff baseRef...HEAD</text>
-    <text x="386" y="174" font-family="system-ui, sans-serif" font-size="11.5" fill="#F87171">• Fails fast if baseRef unfetched</text>
-  </g>
+  <rect x="328" y="60" width="240" height="94" rx="4" class="card"/>
+  <text x="342" y="82" class="code">GitChangedFilesValueSource</text>
+  <text x="342" y="102" class="meta">• Injected ExecOperations</text>
+  <text x="342" y="120" class="meta">• Runs git diff baseRef...HEAD</text>
+  <text x="342" y="138" class="meta">• Throws GradleException on failure</text>
 
-  <!-- PrintAffectedTasksTask -->
-  <g filter="url(#drop)">
-    <rect x="368" y="218" width="260" height="146" rx="12" fill="#1E293B" stroke="#8B5CF6" stroke-width="1.5"/>
-    <text x="386" y="244" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#DDD6FE">PrintAffectedTasksTask</text>
-    <line x1="368" y1="256" x2="628" y2="256" stroke="#334155" stroke-width="1"/>
-    <text x="386" y="278" font-family="ui-monospace, monospace" font-size="11" fill="#A78BFA">@DisableCachingByDefault</text>
-    <text x="386" y="298" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">@Input changedFiles</text>
-    <text x="386" y="316" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">@Input moduleDirs / reverseDeps</text>
-    <text x="386" y="334" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">@Input moduleTaskMap / taskMode</text>
-    <text x="386" y="352" font-family="system-ui, sans-serif" font-size="11" fill="#94A3B8">Zero Task.project references</text>
-  </g>
+  <rect x="328" y="178" width="240" height="118" rx="4" class="card"/>
+  <text x="342" y="200" class="code">PrintAffectedTasksTask</text>
+  <text x="342" y="220" class="meta">• @DisableCachingByDefault</text>
+  <text x="342" y="238" class="meta">• Serializable @Input properties</text>
+  <text x="342" y="256" class="meta">• Zero Task.project references</text>
+  <text x="342" y="274" class="meta">• Prints matched tasks to stdout</text>
 
-  <!-- Pure Core Box: AffectedModuleCalculator -->
-  <g filter="url(#drop)">
-    <rect x="708" y="76" width="316" height="184" rx="14" fill="url(#seamCore)" stroke="#34D399" stroke-width="2"/>
-    <text x="866" y="104" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="700" fill="#FFFFFF">
-      AffectedModuleCalculator
-    </text>
-    <line x1="708" y1="118" x2="1024" y2="118" stroke="#10B981" stroke-width="1"/>
-    <text x="728" y="142" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• Longest-prefix nested module match</text>
-    <text x="728" y="164" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• Separates src/test vs src/androidTest</text>
-    <text x="728" y="186" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• Transitive BFS on reverseDependencies</text>
-    <text x="728" y="208" font-family="system-ui, sans-serif" font-size="12" fill="#ECFDF5">• 100% pure JVM unit-tested in &lt;50ms</text>
-    <rect x="728" y="222" width="276" height="24" rx="6" fill="#022C22"/>
-    <text x="866" y="238" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#6EE7B7">
-      calculate(...) : AffectedAnalysisResult
-    </text>
-  </g>
+  <!-- Cards inside Pure Kotlin Seam -->
+  <rect x="628" y="60" width="292" height="130" rx="4" class="card-seam"/>
+  <text x="644" y="84" class="code-seam">AffectedModuleCalculator</text>
+  <text x="644" y="106" class="meta">• Longest-prefix module path matching</text>
+  <text x="644" y="124" class="meta">• Separates src/test vs src/androidTest</text>
+  <text x="644" y="142" class="meta">• Transitive BFS on reverseDependencies</text>
+  <text x="644" y="160" class="meta">• Pure function: calculate(...)</text>
 
-  <!-- AffectedAnalysisResult -->
-  <g filter="url(#drop)">
-    <rect x="708" y="280" width="316" height="92" rx="12" fill="#1E293B" stroke="#10B981" stroke-width="1.5"/>
-    <text x="866" y="304" text-anchor="middle" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#6EE7B7">
-      AffectedAnalysisResult
-    </text>
-    <text x="728" y="326" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">• affectedTestModules / ScreenshotModules</text>
-    <text x="728" y="344" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">• affectedAndroidTestModules</text>
-    <text x="728" y="362" font-family="ui-monospace, monospace" font-size="11" fill="#E2E8F0">• affectedLintModules</text>
-  </g>
+  <rect x="628" y="214" width="292" height="82" rx="4" class="card"/>
+  <text x="644" y="236" class="code">AffectedAnalysisResult</text>
+  <text x="644" y="256" class="meta">• affectedTestModules / ScreenshotModules</text>
+  <text x="644" y="274" class="meta">• affectedAndroidTestModules / LintModules</text>
 
-  <!-- Internal & Cross-Boundary Arrows -->
-  <line x1="312" y1="130" x2="364" y2="130" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
-  <line x1="312" y1="168" x2="364" y2="260" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
-  <line x1="184" y1="204" x2="184" y2="232" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
-  <line x1="498" y1="186" x2="498" y2="214" stroke="#818CF8" stroke-width="2" marker-end="url(#arrIndigo)"/>
-  <line x1="628" y1="290" x2="704" y2="180" stroke="#34D399" stroke-width="2.5" marker-end="url(#arrEmerald)"/>
-  <line x1="866" y1="260" x2="866" y2="276" stroke="#34D399" stroke-width="2" marker-end="url(#arrEmerald)"/>
+  <!-- Connectors -->
+  <line x1="280" y1="100" x2="326" y2="100" class="edge" marker-end="url(#ar)"/>
+  <line x1="280" y1="130" x2="326" y2="215" class="edge" marker-end="url(#ar)"/>
+  <line x1="160" y1="166" x2="160" y2="188" class="edge" marker-end="url(#ar)"/>
+  <line x1="448" y1="154" x2="448" y2="176" class="edge" marker-end="url(#ar)"/>
+  <line x1="568" y1="237" x2="626" y2="135" class="edge" marker-end="url(#ar)"/>
+  <line x1="774" y1="190" x2="774" y2="212" class="edge" marker-end="url(#ar)"/>
 </svg>
