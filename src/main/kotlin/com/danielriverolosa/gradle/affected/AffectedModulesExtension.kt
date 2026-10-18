@@ -9,6 +9,9 @@ abstract class AffectedModulesExtension {
     abstract val globalPaths: ListProperty<String>
     abstract val androidUnitTestTaskName: Property<String>
     abstract val jvmTestTaskName: Property<String>
+    abstract val androidInstrumentationTestTaskName: Property<String>
+    abstract val screenshotTestTaskName: Property<String>
+    abstract val screenshotPluginId: Property<String>
     abstract val lintTaskName: Property<String>
 
     init {
@@ -33,6 +36,9 @@ abstract class AffectedModulesExtension {
         )
         androidUnitTestTaskName.convention("testDebugUnitTest")
         jvmTestTaskName.convention("test")
+        androidInstrumentationTestTaskName.convention("connectedDebugAndroidTest")
+        screenshotTestTaskName.convention("verifyRoborazziDebug")
+        screenshotPluginId.convention("io.github.takahirom.roborazzi")
         lintTaskName.convention("lintRelease")
     }
 }

@@ -31,20 +31,31 @@ class AffectedModulesPlugin : Plugin<Project> {
             }
             .orElse(gitChangedFilesProvider)
 
+        val androidTestTaskOverride = target.providers.gradleProperty("androidTestTaskName")
+            .orElse(extension.androidInstrumentationTestTaskName)
+        val screenshotTaskOverride = target.providers.gradleProperty("screenshotTaskName")
+            .orElse(extension.screenshotTestTaskName)
+
         val moduleDirsMap = linkedMapOf<String, String>()
         val reverseDepsMap = linkedMapOf<String, MutableSet<String>>()
         val testTaskMap = linkedMapOf<String, String>()
+        val androidTestTaskMap = linkedMapOf<String, String>()
+        val screenshotTaskMap = linkedMapOf<String, String>()
         val lintTaskMap = linkedMapOf<String, String>()
 
         target.gradle.projectsEvaluated {
             val rootFile = target.rootDir
-            val androidTestTask = extension.androidUnitTestTaskName.get()
+            val androidUnitTestTask = extension.androidUnitTestTaskName.get()
             val jvmTestTask = extension.jvmTestTaskName.get()
+            val androidInstrumentedTask = androidTestTaskOverride.get()
+            val screenshotTask = screenshotTaskOverride.get()
+            val screenshotPlugin = extension.screenshotPluginId.get()
             val lintTask = extension.lintTaskName.get()
 
             target.subprojects.forEach { sub ->
                 val hasMainOrTest = sub.file("src/main").exists() ||
                     sub.file("src/test").exists() ||
+                    sub.file("src/androidTest").exists() ||
                     sub.file("build.gradle.kts").exists() ||
                     sub.file("build.gradle").exists()
 
@@ -62,8 +73,11 @@ class AffectedModulesPlugin : Plugin<Project> {
                     sub.plugins.hasPlugin("java")
 
                 if (isAndroid) {
-                    testTaskMap[sub.path] = androidTestTask
+                    testTaskMap[sub.path] = androidUnitTestTask
                     lintTaskMap[sub.path] = lintTask
+                    if (sub.file("src/androidTest").exists()) {
+                        androidTestTaskMap[sub.path] = androidInstrumentedTask
+                    }
                 } else if (isJvm) {
                     testTaskMap[sub.path] = jvmTestTask
                     when {
@@ -72,6 +86,10 @@ class AffectedModulesPlugin : Plugin<Project> {
                             lintTaskMap[sub.path] = "lint"
                         }
                     }
+                }
+
+                if (sub.plugins.hasPlugin(screenshotPlugin) || sub.tasks.names.contains(screenshotTask)) {
+                    screenshotTaskMap[sub.path] = screenshotTask
                 }
 
                 sub.configurations.forEach { config ->
@@ -99,6 +117,30 @@ class AffectedModulesPlugin : Plugin<Project> {
             ignoredPaths.set(extension.ignoredPaths)
             globalPaths.set(extension.globalPaths)
             taskMode.set(PrintAffectedTasksTask.MODE_TEST)
+        }
+
+        target.tasks.register<PrintAffectedTasksTask>("printAffectedAndroidTestTasks") {
+            group = "verification"
+            description = "Prints space-separated instrumented androidTest tasks for affected modules with src/androidTest."
+            changedFiles.set(changedFilesProvider)
+            moduleDirs.set(target.provider { moduleDirsMap.toMap() })
+            reverseDependencies.set(target.provider { reverseDepsMap.mapValues { it.value.toSet() } })
+            moduleTaskMap.set(target.provider { androidTestTaskMap.toMap() })
+            ignoredPaths.set(extension.ignoredPaths)
+            globalPaths.set(extension.globalPaths)
+            taskMode.set(PrintAffectedTasksTask.MODE_ANDROID_TEST)
+        }
+
+        target.tasks.register<PrintAffectedTasksTask>("printAffectedScreenshotTasks") {
+            group = "verification"
+            description = "Prints space-separated screenshot test tasks for affected modules applying Roborazzi."
+            changedFiles.set(changedFilesProvider)
+            moduleDirs.set(target.provider { moduleDirsMap.toMap() })
+            reverseDependencies.set(target.provider { reverseDepsMap.mapValues { it.value.toSet() } })
+            moduleTaskMap.set(target.provider { screenshotTaskMap.toMap() })
+            ignoredPaths.set(extension.ignoredPaths)
+            globalPaths.set(extension.globalPaths)
+            taskMode.set(PrintAffectedTasksTask.MODE_SCREENSHOT)
         }
 
         target.tasks.register<PrintAffectedTasksTask>("printAffectedLintTasks") {

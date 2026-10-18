@@ -44,6 +44,8 @@ abstract class PrintAffectedTasksTask : DefaultTask() {
 
         val targetModules = when (taskMode.get()) {
             MODE_LINT -> result.affectedLintModules
+            MODE_ANDROID_TEST -> result.affectedAndroidTestModules
+            MODE_SCREENSHOT -> result.affectedScreenshotModules
             else -> result.affectedTestModules
         }
 
@@ -58,6 +60,8 @@ abstract class PrintAffectedTasksTask : DefaultTask() {
 
     companion object {
         const val MODE_TEST = "test"
+        const val MODE_ANDROID_TEST = "androidTest"
+        const val MODE_SCREENSHOT = "screenshot"
         const val MODE_LINT = "lint"
     }
 }

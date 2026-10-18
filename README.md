@@ -131,7 +131,10 @@ affectedModules {
 | `globalPaths` | `ListProperty<String>` | `["build-logic/", "gradle/libs.versions.toml", "gradle/wrapper/", "build.gradle.kts", "settings.gradle.kts", "gradle.properties"]` | Root files or directory prefixes whose modification marks all project modules as affected. |
 | `androidUnitTestTaskName` | `Property<String>` | `"testDebugUnitTest"` | Unit test task name emitted for modules with `com.android.application`, `com.android.library`, or `com.android.test`. |
 | `jvmTestTaskName` | `Property<String>` | `"test"` | Unit test task name emitted for pure JVM modules (`org.jetbrains.kotlin.jvm`, `java-library`). |
-| `lintTaskName` | `Property<String>` | `"lintRelease"` | Lint task name emitted for Android modules (and JVM modules that define a matching lint task). |
+| `androidInstrumentationTestTaskName` | `Property<String>` | `"connectedDebugAndroidTest"` | Instrumented `androidTest` task name emitted for Android modules containing `src/androidTest` (overridable via `-PandroidTestTaskName=...`). |
+| `screenshotTestTaskName` | `Property<String>` | `"verifyRoborazziDebug"` | Screenshot task name emitted for modules applying `screenshotPluginId` (overridable via `-PscreenshotTaskName=recordRoborazziDebug`). |
+| `screenshotPluginId` | `Property<String>` | `"io.github.takahirom.roborazzi"` | Gradle plugin ID used to identify modules with screenshot tests. |
+| `lintTaskName` | `Property<String>` | `"lintRelease"` | Lint task name emitted for Android modules (and `"lint"` fallback for JVM modules with `com.android.lint`). |
 
 ---
 
@@ -141,16 +144,20 @@ affectedModules {
 
 | Task | Output | Description |
 | :--- | :--- | :--- |
-| `./gradlew -q printAffectedTestTasks` | Space-separated task list | Prints unit test tasks for affected modules and transitive dependents (or empty string if none). |
-| `./gradlew -q printAffectedLintTasks` | Space-separated task list | Prints lint tasks for affected modules and transitive dependents (or empty string if none). |
+| `./gradlew -q printAffectedTestTasks` | Space-separated task list | Prints unit test tasks (`testDebugUnitTest` / `test`) for affected modules and transitive dependents. |
+| `./gradlew -q printAffectedAndroidTestTasks` | Space-separated task list | Prints instrumented `androidTest` tasks (`connectedDebugAndroidTest` or GMD task) for affected Android modules with `src/androidTest`. |
+| `./gradlew -q printAffectedScreenshotTasks` | Space-separated task list | Prints Roborazzi screenshot tasks (`verifyRoborazziDebug` / `recordRoborazziDebug`) for affected modules applying Roborazzi. |
+| `./gradlew -q printAffectedLintTasks` | Space-separated task list | Prints lint tasks (`lintRelease` / `lint`) for affected modules and transitive dependents. |
 
 ### CLI Property Overrides
 
 - `-PbaseRef=<git-ref>`: Overrides `affectedModules.baseRef` (e.g., `-PbaseRef=origin/main`).
-- `-PchangedFiles=<csv>`: Bypasses `git diff` and computes affected tasks for an explicit comma-separated list of relative paths (useful for debugging and dry runs):
+- `-PandroidTestTaskName=<task>`: Overrides the instrumented test task name (e.g., `-PandroidTestTaskName=pixel6Api34DebugAndroidTest`).
+- `-PscreenshotTaskName=<task>`: Overrides the screenshot task name (e.g., `-PscreenshotTaskName=recordRoborazziDebug`).
+- `-PchangedFiles=<csv>`: Bypasses `git diff` and computes affected tasks for an explicit comma-separated list of relative paths:
   ```bash
-  ./gradlew -q printAffectedTestTasks -PchangedFiles="feature/alarms/src/main/java/AlarmsScreen.kt"
-  # Output: :app:testDebugUnitTest :feature:alarms:testDebugUnitTest
+  ./gradlew -q printAffectedScreenshotTasks -PchangedFiles="feature/alarms/src/main/java/AlarmsScreen.kt" -PscreenshotTaskName=recordRoborazziDebug
+  # Output: :feature:alarms:recordRoborazziDebug
   ```
 
 ---
