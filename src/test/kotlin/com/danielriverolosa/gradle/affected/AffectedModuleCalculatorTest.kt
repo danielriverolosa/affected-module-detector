@@ -88,7 +88,7 @@ class AffectedModuleCalculatorTest {
     }
 
     @Test
-    fun `when only src test in a module changes then only unit and screenshot tests for that module are affected`() {
+    fun `when only regular unit test in src test changes then only unit tests for that module are affected`() {
         val result = AffectedModuleCalculator.calculate(
             changedFiles = listOf("data/src/test/java/com/example/data/dao/OrderDaoTest.kt"),
             moduleDirs = moduleDirs,
@@ -98,7 +98,45 @@ class AffectedModuleCalculatorTest {
         )
 
         assertEquals(setOf(":data"), result.affectedTestModules)
-        assertEquals(setOf(":data"), result.affectedScreenshotModules)
+        assertEquals(emptySet(), result.affectedScreenshotModules)
+        assertEquals(emptySet(), result.affectedAndroidTestModules)
+        assertEquals(emptySet(), result.affectedLintModules)
+    }
+
+    @Test
+    fun `when only src screenshotTest changes then only screenshot tests for that module are affected`() {
+        val result = AffectedModuleCalculator.calculate(
+            changedFiles = listOf(
+                "feature/checkout/src/screenshotTest/kotlin/com/example/feature/checkout/CheckoutPreviewScreenshots.kt",
+                "feature/checkout/src/screenshotTestDebug/reference/CheckoutPreview.png",
+            ),
+            moduleDirs = moduleDirs,
+            reverseDependencies = reverseDependencies,
+            ignoredPaths = defaultIgnoredPaths,
+            globalPaths = defaultGlobalPaths,
+        )
+
+        assertEquals(emptySet(), result.affectedTestModules)
+        assertEquals(setOf(":feature:checkout"), result.affectedScreenshotModules)
+        assertEquals(emptySet(), result.affectedAndroidTestModules)
+        assertEquals(emptySet(), result.affectedLintModules)
+    }
+
+    @Test
+    fun `when only Roborazzi ScreenshotTest or golden png in src test changes then only screenshot tests for that module are affected`() {
+        val result = AffectedModuleCalculator.calculate(
+            changedFiles = listOf(
+                "feature/catalog/src/test/java/com/example/feature/catalog/CatalogScreenScreenshotTest.kt",
+                "feature/catalog/src/test/screenshots/catalog_light.png",
+            ),
+            moduleDirs = moduleDirs,
+            reverseDependencies = reverseDependencies,
+            ignoredPaths = defaultIgnoredPaths,
+            globalPaths = defaultGlobalPaths,
+        )
+
+        assertEquals(emptySet(), result.affectedTestModules)
+        assertEquals(setOf(":feature:catalog"), result.affectedScreenshotModules)
         assertEquals(emptySet(), result.affectedAndroidTestModules)
         assertEquals(emptySet(), result.affectedLintModules)
     }

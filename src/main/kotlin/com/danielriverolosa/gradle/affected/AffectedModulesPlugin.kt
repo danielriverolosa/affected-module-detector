@@ -50,12 +50,15 @@ class AffectedModulesPlugin : Plugin<Project> {
             val androidInstrumentedTask = androidTestTaskOverride.get()
             val screenshotTask = screenshotTaskOverride.get()
             val screenshotPlugin = extension.screenshotPluginId.get()
+            val hasExplicitScreenshotTaskOverride = target.providers.gradleProperty("screenshotTaskName").isPresent ||
+                screenshotTask != "verifyRoborazziDebug"
             val lintTask = extension.lintTaskName.get()
 
             target.subprojects.forEach { sub ->
                 val hasMainOrTest = sub.file("src/main").exists() ||
                     sub.file("src/test").exists() ||
                     sub.file("src/androidTest").exists() ||
+                    sub.file("src/screenshotTest").exists() ||
                     sub.file("build.gradle.kts").exists() ||
                     sub.file("build.gradle").exists()
 
@@ -88,8 +91,19 @@ class AffectedModulesPlugin : Plugin<Project> {
                     }
                 }
 
-                if (sub.plugins.hasPlugin(screenshotPlugin) || sub.tasks.names.contains(screenshotTask)) {
-                    screenshotTaskMap[sub.path] = screenshotTask
+                when {
+                    sub.plugins.hasPlugin(screenshotPlugin) || sub.tasks.names.contains(screenshotTask) -> {
+                        screenshotTaskMap[sub.path] = screenshotTask
+                    }
+                    sub.plugins.hasPlugin("com.android.compose.screenshot") ||
+                        sub.tasks.names.contains("validateDebugScreenshotTest") ||
+                        sub.file("src/screenshotTest").exists() -> {
+                        screenshotTaskMap[sub.path] = if (hasExplicitScreenshotTaskOverride) {
+                            screenshotTask
+                        } else {
+                            "validateDebugScreenshotTest"
+                        }
+                    }
                 }
 
                 sub.configurations.forEach { config ->

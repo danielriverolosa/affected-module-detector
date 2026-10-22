@@ -46,7 +46,8 @@ Legacy plugins such as Dropbox's `AffectedModuleDetector` (archived in 2023) rel
 | :--- | :--- | :--- | :--- |
 | **Ignored Paths** | `docs/ARCHITECTURE.md`, `README.md`, `.gitignore` | Ignored | None (`""` — CI skips execution) |
 | **Global Build Paths** | `build-logic/**`, `gradle/libs.versions.toml`, `build.gradle.kts`, `settings.gradle.kts` | All modules in repository | Unit Test, Screenshot, `androidTest` & Lint tasks for **all** applicable modules |
-| **Unit Test-Only Changes** | `feature/checkout/src/test/**` | **No propagation** (production ABI unchanged) | Unit & Screenshot tasks for the modified module only; **0** `androidTest` or Lint tasks |
+| **Unit Test-Only Changes** | `feature/checkout/src/test/**` | **No propagation** (production ABI unchanged) | Unit test task for the modified module only; **0** screenshot, `androidTest`, or Lint tasks |
+| **Screenshot Test-Only Changes** | `feature/checkout/src/screenshotTest/**`, `src/test/screenshots/**`, `*ScreenshotTest.kt` | **No propagation** (production ABI unchanged) | Screenshot task (`validateDebugScreenshotTest` / `verifyRoborazziDebug`) for the modified module only; **0** unit test, `androidTest`, or Lint tasks |
 | **Instrumented Test-Only Changes** | `app/src/androidTest/**` | **No propagation** (production ABI unchanged) | `androidTest` task for the modified module only; **0** unit test, screenshot, or Lint tasks |
 | **Production Changes** | `domain/src/main/**`, `domain/build.gradle.kts` | **Transitive BFS** up the reverse dependency DAG | Unit Test, Screenshot, `androidTest` & Lint tasks for the module + all direct and transitive dependents |
 

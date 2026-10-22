@@ -34,6 +34,7 @@ object AffectedModuleCalculator {
         val directMainModules = linkedSetOf<String>()
         val directUnitTestOnlyModules = linkedSetOf<String>()
         val directAndroidTestOnlyModules = linkedSetOf<String>()
+        val directScreenshotTestOnlyModules = linkedSetOf<String>()
 
         for (rawFile in changedFiles) {
             val file = rawFile.trim().replace('\\', '/').removePrefix("./")
@@ -62,6 +63,7 @@ object AffectedModuleCalculator {
                 val (modulePath, moduleDir) = owningModuleEntry
                 val relativeInModule = file.removePrefix("${moduleDir.trimEnd('/')}/")
                 when {
+                    isScreenshotTestOnlyPath(relativeInModule) -> directScreenshotTestOnlyModules += modulePath
                     isUnitTestOnlyPath(relativeInModule) -> directUnitTestOnlyModules += modulePath
                     isAndroidTestOnlyPath(relativeInModule) -> directAndroidTestOnlyModules += modulePath
                     else -> directMainModules += modulePath
@@ -80,12 +82,13 @@ object AffectedModuleCalculator {
         val transitiveMainModules = computeTransitiveClosure(directMainModules, reverseDependencies)
         val finalUnitTestModules = (transitiveMainModules + directUnitTestOnlyModules).toSortedSet()
         val finalAndroidTestModules = (transitiveMainModules + directAndroidTestOnlyModules).toSortedSet()
+        val finalScreenshotModules = (transitiveMainModules + directScreenshotTestOnlyModules).toSortedSet()
         val finalLintModules = transitiveMainModules.toSortedSet()
 
         return AffectedAnalysisResult(
             affectedTestModules = finalUnitTestModules,
             affectedAndroidTestModules = finalAndroidTestModules,
-            affectedScreenshotModules = finalUnitTestModules,
+            affectedScreenshotModules = finalScreenshotModules,
             affectedLintModules = finalLintModules,
         )
     }
@@ -107,6 +110,19 @@ object AffectedModuleCalculator {
                 else -> file == pattern || file.startsWith("$pattern/")
             }
         }
+    }
+
+    private fun isScreenshotTestOnlyPath(relativeInModule: String): Boolean {
+        return relativeInModule.startsWith("src/screenshotTest/") ||
+            relativeInModule.startsWith("src/screenshotTestDebug/") ||
+            relativeInModule.startsWith("src/screenshotTestRelease/") ||
+            relativeInModule.contains("/screenshotTest/") ||
+            relativeInModule.startsWith("src/test/screenshots/") ||
+            relativeInModule.startsWith("src/test/snapshots/") ||
+            (
+                relativeInModule.startsWith("src/test/") &&
+                    (relativeInModule.endsWith("ScreenshotTest.kt") || relativeInModule.endsWith("ScreenshotTest.java"))
+                )
     }
 
     private fun isUnitTestOnlyPath(relativeInModule: String): Boolean {
