@@ -2,10 +2,7 @@ name: Publish Plugin
 
 on:
   push:
-    branches: [ "master" ]
     tags: [ "v*" ]
-  pull_request:
-    branches: [ "master" ]
   workflow_dispatch:
 
 permissions:
@@ -13,7 +10,8 @@ permissions:
   packages: write
 
 jobs:
-  build-and-publish:
+  publish:
+    name: Publish Release
     runs-on: ubuntu-latest
 
     steps:
@@ -33,8 +31,14 @@ jobs:
         run: ./gradlew check
 
       - name: Publish to GitHub Packages
-        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew publish
+        run: ./gradlew publishAllPublicationsToGitHubPackagesRepository
+
+      - name: Publish to Gradle Plugin Portal
+        if: env.GRADLE_PUBLISH_KEY != '' && env.GRADLE_PUBLISH_SECRET != ''
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+        run: ./gradlew publishPlugins

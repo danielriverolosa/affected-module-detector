@@ -1,9 +1,11 @@
 # Affected Module Detector — Gradle 9 Plugin
 
+[![Build](https://github.com/danielriverolosa/affected-module-detector/actions/workflows/Build.yaml/badge.svg)](https://github.com/danielriverolosa/affected-module-detector/actions/workflows/Build.yaml)
 [![Gradle 9.7+](https://img.shields.io/badge/Gradle-9.7%2B-02303A?logo=gradle)](https://gradle.org)
 [![Kotlin 2.4+](https://img.shields.io/badge/Kotlin-2.4%2B-7F52FF?logo=kotlin)](https://kotlinlang.org)
 [![Configuration Cache](https://img.shields.io/badge/Configuration%20Cache-Compatible-brightgreen)](#why-this-plugin-exists)
 [![Build Cache](https://img.shields.io/badge/Build%20Cache-Compatible-brightgreen)](#why-this-plugin-exists)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 A lightweight, zero-dependency Gradle 9+ plugin that computes the exact subset of module **unit test**, **Roborazzi screenshot**, **instrumented `androidTest`**, and **Android/JVM Lint** tasks affected by a Git change set—including transitive dependents across the project dependency graph—without breaking the **Gradle Configuration Cache** or **Gradle Build Cache**.
 
@@ -186,3 +188,9 @@ Ensure `actions/checkout` fetches git history (`fetch-depth: 0`) so `origin/mast
 ```
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for internal design details.
+
+---
+
+## License
+
+Licensed under the [Apache License, Version 2.0](LICENSE).
